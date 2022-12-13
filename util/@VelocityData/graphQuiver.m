@@ -14,12 +14,12 @@ function fig = graphQuiver(this)
     U = this.velocityPlaneCartesian(:, :, 1);
     V = this.velocityPlaneCartesian(:, :, 2);
     
-    s = plotdefaults;
+    
     fig = figure;
-    quiver(X, Y, U, V, 'color', s.col.blue(9, :), 'LineWidth', 0.75*s.std.LineWidth);
+    quiver(X, Y, U, V, 'color', PlotDefaults.colours.blue(9, :), 'LineWidth', PlotDefaults.std.LineWidth);
 
-    xlabel('$x$', 'interpreter', 'latex', 'FontSize', s.std.FontSizeLab);
-    ylabel('$y$', 'interpreter', 'latex', 'FontSize', s.std.FontSizeLab);
+    xlabel('$x$', 'interpreter', 'latex', 'FontSize', PlotDefaults.std.FontSizeLab);
+    ylabel('$y$', 'interpreter', 'latex', 'FontSize', PlotDefaults.std.FontSizeLab);
 
     ax = gca;
     D = ax.DataAspectRatio;

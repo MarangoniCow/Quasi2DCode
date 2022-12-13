@@ -4,7 +4,7 @@
 
 
 
-function graphStreamlines(this, fcnName)
+function fig = graphStreamlines(this, fcnName)
 
 
     switch(fcnName)
@@ -32,7 +32,13 @@ function graphStreamlines(this, fcnName)
     colormap parula
     shading interp
 
-    hf = streamslice(X', Y', Ur', Ut');
+    R   = this.VelData.R;
+    Th  = this.VelData.Th;
+
+    Ux =    Ur.*cos(Th) - Ut.*sin(Th);
+    Uy =    Ur.*sin(Th) + Ut.*cos(Th);
+
+    hf = streamslice(X', Y', Ux', Uy');
 
     % Change streamline colours
     
@@ -42,8 +48,10 @@ function graphStreamlines(this, fcnName)
     end
     hold off
     
+    axis tight
     PlotDefaults.applyDefaultLabels;
-    PlotDefaults.applyEqualAxis;
+    PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
+    title(['Streamlines for ', fcnName, 'field, ID: ' this.VelData.seriesID], 'interpreter', 'none')
 
 end

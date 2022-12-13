@@ -18,6 +18,6 @@ function fig = graphStreamfunction(this, fcnName)
 
 
     % Set square x-y
-    PlotDefaults.applyEqualAxis;
+    PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applyDefaultLabels;
 end

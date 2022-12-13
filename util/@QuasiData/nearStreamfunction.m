@@ -1,5 +1,5 @@
 
-function psi = nearStreamFunction(this, R, Th)
+function psi = nearStreamfunction(this, R, Th)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % nearStreamFunction(R, Th)
             %

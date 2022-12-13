@@ -13,6 +13,9 @@ function graphResidues(this, fcnName)
     % Generate a new figure
     fig = figure;
 
+    Th = this.VelData.Th;
+    R = this.VelData.R;
+
 
     % Check for defiend parameters
     this.checkForParameters;
@@ -20,21 +23,33 @@ function graphResidues(this, fcnName)
     % Fetch coordinates
     X = this.VelData.X;
     Y = this.VelData.Y;
-    Vr = this.VelData.velocityPlanePolar(:, :, 1);
-    Vt = this.VelData.velocityPlanePolar(:, :, 2);
+    Vx = this.VelData.velocityPlanePolar(:, :, 1);
+    Vy = this.VelData.velocityPlanePolar(:, :, 2);
 
-    Wr = Vr - Ur;
-    Wt = Vt - Ut;
+    Ux =    Ur.*cos(Th) - Ut.*sin(Th);
+    Uy =    Ur.*sin(Th) + Ut.*cos(Th);
+
+    Ux = Ux./max(Ux);
+    Uy = Uy./max(Uy);
+
+    Vx = Vx./max(Vx);
+    Vy = Vy./max(Vy);
+
+    
+
+
+    Wx = Vx - Ux;
+    Wy = Vy - Uy;
     
     
     % Colourmap plot: absolute value of velocity.    
     hold on
-    Uabs = abs(Wr) + abs(Wt);
+    Uabs = abs(Wx) + abs(Wy);
     pcolor(X, Y, Uabs);
     colormap parula
     shading interp
 
-    hf = streamslice(X', Y', Wr', Wt');
+    hf = streamslice(X', Y', Wx', Wy');
 
     % Change streamline colours
     
@@ -44,8 +59,11 @@ function graphResidues(this, fcnName)
     end
     hold off
     
+    axis tight
     PlotDefaults.applyDefaultLabels;
-    PlotDefaults.applyEqualAxis;
+    PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
+
+    title(['Streamline residues for ', fcnName, 'field, ID: ' this.VelData.seriesID], 'interpreter', 'none')
 
 end

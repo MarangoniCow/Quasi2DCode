@@ -42,8 +42,10 @@ function fig = graphStreamlines(this)
     hold off
     
     % Apply plot defaults
+    axis tight
     PlotDefaults.applyDefaultLabels;
-    PlotDefaults.applyEqualAxis;
+    PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
+    title(['Streamlines for series ID: ' this.seriesID], 'interpreter', 'none')
 
 end

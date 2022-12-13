@@ -57,7 +57,7 @@ classdef QuasiData < matlab.mixin.SetGet
     % Stream function methods
     methods
         psi = nearStreamfunction(this, R, Th);
-        psi = farStreamFunction (this, R, Th);
+        psi = farStreamfunction (this, R, Th);
         [ur, ut] = nearVelocityField(this, R, Th);
         [ur, ut] = farVelocityField(this, R, Th);
     end

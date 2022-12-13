@@ -1,4 +1,4 @@
-function psi = farStreamFunction(this, R, Th)
+function psi = farStreamfunction(this, R, Th)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5555
             % farStreamFunction(R, Th)
             %
