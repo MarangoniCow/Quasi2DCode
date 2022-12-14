@@ -29,6 +29,8 @@ classdef QuasiData < matlab.mixin.SetGet
         B_near              % Near-field coefficients
         psi_near
         psi_far
+        stats_near
+        stats_far
         lambda
         colloidRadius
         colloidVelocity

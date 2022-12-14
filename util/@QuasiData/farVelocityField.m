@@ -44,7 +44,6 @@ function [ur, ut] = farVelocityField(this, r, theta)
     % Define besselk'_i(r/lambda)
     BKD1 = -1./lambda.*(besselk(0, r./lambda) + lambda./r.*besselk(1, r./lambda));
     BKD2 = -1./lambda.*(besselk(1, r./lambda) + 2.*lambda./r.*besselk(2, r./lambda));
-%     BKD3 = -1./lambda.*(besselk(2, r./lambda) + 3.*lambda./r.*besselk(3, r./lambda));
     BKD4 = -1./lambda.*(besselk(3, r./lambda) + 4.*lambda./r.*besselk(4, r./lambda));
 
     % Define radial component

@@ -102,6 +102,6 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     convertPolar(VelObj, x0, y0);
 
     QuasiObj = QuasiData(VelObj);
-    QuasiObj.estimateStreamFunction;
+    QuasiObj.estimateStreamFunction(2);
 
 end

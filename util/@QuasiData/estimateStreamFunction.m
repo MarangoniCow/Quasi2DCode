@@ -92,13 +92,13 @@ function estimateStreamFunction(this, solve_order)
         % Switch between orders
         switch solve_order
             case 1
-                far_guess   = [0.1, 0.1];
+                far_guess   = [1, -0.1];
                 near_guess  = [0.1];
             case 2
-                far_guess   = [0.1,-0.1, 0.1, 0.1];
+                far_guess   = [1, 10, -0.1, -0.1];
                 near_guess  = [0.1, -0.1];
             case 4
-                far_guess   = [0.1, 0.1, 0.1, 0.1, 0.1, 0.001];
+                far_guess   = [1, 10, -0.1, -0.1, 0.01, 0.01];
                 near_guess  = [0.1, -0.5, -0.5];
         end
         
@@ -107,8 +107,8 @@ function estimateStreamFunction(this, solve_order)
         options = optimset('MaxFunEvals', 300*length(far_guess), 'MaxIter', 300*length(far_guess));
         
         % Run fminsearch
-        this.B_far  = fminsearch(@Q2D_farfield, far_guess, options);
-        this.B_near = fminsearch(@Q2D_nearfield, near_guess, options);
+        [this.B_far, ~, ~ this.stats_far]  = fminsearch(@Q2D_farfield, far_guess, options);
+        [this.B_near, ~, ~ this.stats_near] = fminsearch(@Q2D_nearfield, near_guess, options);
         
         
         %%%%%%%%%%%%%%%%%% ANALYTICALLY DEFINED STREAM FUNCTIONS %%%%%%%%%%%%%%%%%%
