@@ -11,15 +11,15 @@
 %   2) Set the series names
 %   3) Set the system size and colloid radius
 %   4) Set save location
+%   5) Set how much of the plane I want to extract
 
 
 
 %   1) Root folder
-RootFolder = '/users/mjs572/scratch/ludwig/examples/';
+RootFolder = '/home/matthew/Documents/ludwig_viking_data/';
 Data = '/data';
 %   2) Series names
 Series =        [
-                '3DP_Pu_Q2D_W_01';
                 '3DP_Pl_Q2D_W_01';
                 ];
 %   3) System information
@@ -29,6 +29,10 @@ colloidRadius = 11.33;
 
 %   4) Save location
 savelocation = '../Data/';
+
+%   5) Plane extract idx
+planeExtractIdx{1} = 1:256;
+planeExtractIdx{2} = 20:180;
 
 
 % Everything is done dynamically

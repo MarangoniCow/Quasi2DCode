@@ -107,8 +107,8 @@ function estimateStreamFunction(this, solve_order)
         options = optimset('MaxFunEvals', 300*length(far_guess), 'MaxIter', 300*length(far_guess));
         
         % Run fminsearch
-        [this.B_far, ~, ~ this.stats_far]  = fminsearch(@Q2D_farfield, far_guess, options);
-        [this.B_near, ~, ~ this.stats_near] = fminsearch(@Q2D_nearfield, near_guess, options);
+        [this.B_far, ~, ~, this.stats_far]  = fminsearch(@Q2D_farfield, far_guess, options);
+        [this.B_near, ~, ~, this.stats_near] = fminsearch(@Q2D_nearfield, near_guess, options);
         
         
         %%%%%%%%%%%%%%%%%% ANALYTICALLY DEFINED STREAM FUNCTIONS %%%%%%%%%%%%%%%%%%

@@ -24,6 +24,8 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     addOptional(p, 'ColloidRadius', [], ...
                         @(x) isnumeric(x) && isscalar(x))
 
+    addOptional(p, 'PlaneExtractIdx', []);
+
     % Time-step
     addOptional(p, 'TimeStep', 1, ...
                         @(x) isnumeric(x) && isscalar(x))
@@ -59,7 +61,6 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     
 
     % z_idx
-    
     cs = VelObj.colloidDisp(1, :);
     
 
@@ -93,10 +94,18 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     z0 = VelObj.colloidDisp(3, t);
     zidx = closestelement(1:VelObj.systemSize(3), z0);
 
+    if any(strcmp(p.UsingDefaults, 'PlaneExtractIdx'))
+        xidx = 1:VelObj.systemSize(1);
+        yidx = 1:VelObj.systemSize(2);
+    else
+        xidx = p.Results.PlaneExtractIdx{1}; 
+        yidx = p.Results.PlaneExtractIdx{2}; 
+    end
+
     VelObj.extractVelocity;
     
     % Extract velocity plane
-    extractPlane(VelObj, t, zidx);
+    extractPlane(VelObj, t, zidx, xidx, yidx);
     
     % Convert to polar
     convertPolar(VelObj, x0, y0);
