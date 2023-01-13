@@ -22,7 +22,7 @@ function p = CommonQuasiArg(p)
                         @(x) isstring(x) || ischar(x));
 
     % Option to keep VelData
-    addOptional(p, 'RetainVelData', ...
+    addOptional(p, 'RetainVelData', true, ...
                         @(x) islogical(x));
 
 end

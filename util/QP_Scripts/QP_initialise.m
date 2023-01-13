@@ -57,22 +57,27 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     if any(strcmp(p.UsingDefaults, 'TimeStep'))
         idxList = VelObj.findChannelRuns;
 
-        for i = 1:length(idxList)
-            runStart = idxList{i}(1);
-            runEnd = idxList{i}(end);
-            runPercent{i} = (cs(runEnd) - cs(runStart))/VelObj.systemSize(1);
-        end
-
-        if(runPercent{end} > 0.8)
-            runIdx = length(idxList);
+        if isempty(idxList)
+            t = length(VelObj.velocityData);
         else
-            runIdx = length(idxList) - 1;
-        end
 
-        % Use the second to last channel run *** potential bug *** 
-        channelRun = VelObj.colloidDisp(1, idxList{runIdx});
-        midChannel = VelObj.systemSize(1)/2;
-        t = closestelement(channelRun, midChannel) + idxList{runIdx - 1}(end);
+            for i = 1:length(idxList)
+                runStart = idxList{i}(1);
+                runEnd = idxList{i}(end);
+                runPercent{i} = (cs(runEnd) - cs(runStart))/VelObj.systemSize(1);
+            end
+    
+            if(runPercent{end} > 0.8)
+                runIdx = length(idxList);
+            else
+                runIdx = length(idxList) - 1;
+            end
+    
+            % Use the second to last channel run *** potential bug *** 
+            channelRun = VelObj.colloidDisp(1, idxList{runIdx});
+            midChannel = VelObj.systemSize(1)/2;
+            t = closestelement(channelRun, midChannel) + idxList{runIdx - 1}(end);
+        end
     else
         t = p.Results.TimeStep;
     end
@@ -102,4 +107,11 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     QuasiObj = QuasiData(VelObj);
     QuasiObj.estimateStreamFunction(2);
 
+    % Delete raw data if requested
+    if ~p.Results.RetainVelData
+        VelObj.velocityData = [];
+        QuasiObj.VelData.velocityData = [];
+    end
+
+    
 end
