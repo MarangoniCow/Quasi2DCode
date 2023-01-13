@@ -20,19 +20,8 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     % System size
     addRequired(p, 'SystemSize', @(x) isnumeric(x) && length(x) == 3);
 
-    % Colloid size
-    addOptional(p, 'ColloidRadius', [], ...
-                        @(x) isnumeric(x) && isscalar(x))
-
-    addOptional(p, 'PlaneExtractIdx', []);
-
-    % Time-step
-    addOptional(p, 'TimeStep', 1, ...
-                        @(x) isnumeric(x) && isscalar(x))
-
-    % Simulation name
-    addOptional(p, 'SimulationName', '', ...
-                        @(x) isstring(x) || ischar(x));
+    % Fetch common args
+    p = CommonQuasiArg(p);
 
     % Parse inputs
     parse(p, FolderStr, SystemSize, varargin{:});
