@@ -12,7 +12,7 @@ function viking_script(SCRIPTNAME)
     
     RootFolder  = '~/scratch/ludwig/examples';
     
-    folderName   = SCRIPTNAME + '/data';
+    folderName   = [SCRIPTNAME, '/data'];
     
     
     % ----------------------------------------------------------------------- %
@@ -24,13 +24,15 @@ function viking_script(SCRIPTNAME)
     %   Extract meta data from filename
     % ----------------------------------------------------------------------- %
     seriesNumber = SCRIPTNAME(end-1:end);
+
+	disp(['Series number: ', seriesNumber])
     
     
     % ----------------------------------------------------------------------- %
     %   Series non-specific information can be defined here
     % ----------------------------------------------------------------------- %
-        PlaneExtractIdx{1} = 1:10;
-        PlaneExtractIdx{2} = 2:8;
+        PlaneExtractIdx{1} = 1:50;
+        PlaneExtractIdx{2} = 10:40;
         
         ColloidRadius   = 3;  
         
@@ -44,15 +46,15 @@ function viking_script(SCRIPTNAME)
     % ----------------------------------------------------------------------- %
     
     
-    switch(seriesNumber)
+    switch(str2num(seriesNumber))
         case 1
-            SystemSize      = [30, 30, 30];
+          	SystemSize      = [384, 256, 48];
         case 2
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 54];
         case 3
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 60];
         case 4
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 68];
         case 5
             SystemSize      = [10, 10, 10];
         case 6
