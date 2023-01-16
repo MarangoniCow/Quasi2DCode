@@ -31,10 +31,10 @@ function viking_script(SCRIPTNAME)
     % ----------------------------------------------------------------------- %
     %   Series non-specific information can be defined here
     % ----------------------------------------------------------------------- %
-        PlaneExtractIdx{1} = 1:50;
-        PlaneExtractIdx{2} = 10:40;
+        PlaneExtractIdx{1} = 1:384;
+        PlaneExtractIdx{2} = 28:227;
         
-        ColloidRadius   = 3;  
+        ColloidRadius   = 11.33;  
         
         RetainVelData   = false;
         
@@ -50,36 +50,37 @@ function viking_script(SCRIPTNAME)
         case 1
           	SystemSize      = [384, 256, 48];
         case 2
-            SystemSize      = [384, 256, 54];
+            SystemSize      = [384, 256, 56];
         case 3
-            SystemSize      = [384, 256, 60];
+            SystemSize      = [384, 256, 64];
         case 4
-            SystemSize      = [384, 256, 68];
+            SystemSize      = [384, 256, 72];
         case 5
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 80];
         case 6
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 88];
         case 7
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 96];
         case 8
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 104];
         case 9
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 112];
         case 10
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 120];
         case 11
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 128];
         case 12
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 136];
         case 13
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 144];
         case 14
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 152];
         case 15
-            SystemSize      = [10, 10, 10];
+            SystemSize      = [384, 256, 160];
         otherwise
             error('Undetermined system size')
     end
+
     
     
     % ----------------------------------------------------------------------- %
