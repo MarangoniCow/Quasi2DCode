@@ -99,6 +99,10 @@ function S = loadSimulationSeries(RootFolder, FolderPattern, SystemSize, SaveLoc
         [QuasiObj, ~] = QP_initialise(S(i).folder, SystemSize(i, :), ...
                         'SimulationName', fetchSimulationName(S(i).folder), ...
                         varargin{:});
+
+        if(~p.Results.RetainVelData)
+            QuasiObj.VelData.velocityData = [];
+        end
         
         save(fullfile(SaveLocation, QuasiObj.VelData.seriesID), 'QuasiObj', '-v7.3')
     end
