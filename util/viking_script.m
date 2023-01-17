@@ -45,8 +45,8 @@ function viking_script(SCRIPTNAME)
     %   Series specific information can be input here
     % ----------------------------------------------------------------------- %
     
-    
-    switch(str2num(seriesNumber))
+    % IGNORED
+    switch(-1)
         case 1
           	SystemSize      = [384, 256, 48];
         case 2
@@ -80,6 +80,11 @@ function viking_script(SCRIPTNAME)
         otherwise
             error('Undetermined system size')
     end
+
+
+
+
+    SystemSize      = [384, 256, 64];
 
     
     
