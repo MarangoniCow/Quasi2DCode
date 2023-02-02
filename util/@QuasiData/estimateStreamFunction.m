@@ -1,6 +1,6 @@
 
 
-function estimateStreamFunction(this, solve_order)
+function [sum_near, sum_far] = estimateStreamFunction(this, solve_order)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5555
         % estimateStreamfunction(this)
         %
@@ -60,7 +60,7 @@ function estimateStreamFunction(this, solve_order)
         this.colloidRadius = a;
         this.colloidVelocity = U;
 
-        [Xc, Yc] = generateRadialXYPoints(x0, y0, a + 1);
+        [Xc, Yc] = generateRadialXYPoints(x0, y0, a + 10);
         
         % Generate idx list of points
         idxList = [];
@@ -154,7 +154,8 @@ function estimateStreamFunction(this, solve_order)
             
             
             f = 0;
-            
+            N = length(X);
+
             for idx = 1:length(X)
             
                 r = R(idx);
@@ -184,7 +185,7 @@ function estimateStreamFunction(this, solve_order)
                         -C4.*sin(4*theta)./lambda.*BKD4;
                 
                 % Summation
-                f = f + (Vr(idx) - ur).^2 + (Vt(idx) - ut).^2;
+                f = f + sqrt((Vr(idx) - ur).^2 + (Vt(idx) - ut).^2)/N;
             end
         end
     
