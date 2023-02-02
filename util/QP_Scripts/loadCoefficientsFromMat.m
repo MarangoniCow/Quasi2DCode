@@ -22,7 +22,7 @@ l = length(fileNames);
 
 for i = 1:l
     load([folderStr, fileNames(i, :)], 'QuasiObj');
-    coefficients{i} = QuasiObj.B_near;
+    coefficients{i} = QuasiObj.CoeffB;
     seriesID{i} = QuasiObj.VelData.seriesID;
 end
     

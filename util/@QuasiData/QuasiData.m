@@ -1,36 +1,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ========================== CLASS: Q2DDATA ===============================
+% ========================== CLASS: Q2DDATA ===============================CoeffApsi_A
 %
 % Class to encapsulate methods for Quasi-2D parameter estimations
 %
 % MEMBER VARIABLES
 %   - VelData               VelocityData object
-%   - B_near                Near-field coefficients
-%   - B_far                 Far-field coefficients
-%   - psi_near              Fitted near-field streamfunction
-%   - psi_far               Fitted far-field streamfunction
+%   - CoeffB                Second approximation coefficients
+%   - CoeffA                First approximation coefficients
+%   - psi_B                 Second approximation streamfunction
+%   - psi_A                 First approxximation streamfunction
 %   - lambda                `Screening' parameter
 %   - colloidRadius         Colloid radius, used in fitting
 %   - colloidVelocity       Colloid velocity, used in fitting
 %
 % MEMBER FUNCTIONS
-%   - esimateStreamFunction(this)   Estimate the near & farfield streamfunction
-%   - nearStreamFunction            Return the analytically-determined
-%                                   near-streamfunction
-%   - farStreamFunction             Return the analytically-determined
-%                                   far-streamfunction
+%   - esimateStreamFunction(this)   Estimate the A & B streamfunction
+%   - streamFunction_A            Return the first analytically-determined streamfunction
+%   - streamFunction_B            Return the second analytically-determined streamfunction
 %   - checkForVelData               Throws error if VelData not set
 
 classdef QuasiData < matlab.mixin.SetGet
 
     properties
         VelData             % VelocityData object
-        B_far               % Far-field coefficients
-        B_near              % Near-field coefficients
-        psi_near
-        psi_far
-        stats_near
-        stats_far
+        CoeffA              % A-field coefficients
+        CoeffB              % B-field coefficients
+        psi_B
+        psi_A
+        stats_B
+        stats_A
         lambda
         colloidRadius
         colloidVelocity
@@ -50,7 +48,7 @@ classdef QuasiData < matlab.mixin.SetGet
         end
 
         function checkForParameters(this)
-            if isempty(this.B_far) || isempty(this.B_near)
+            if isempty(this.CoeffA) || isempty(this.CoeffB)
                 error('Parameters undefined');
             end
         end
@@ -58,10 +56,10 @@ classdef QuasiData < matlab.mixin.SetGet
     
     % Stream function methods
     methods
-        psi = nearStreamfunction(this, R, Th);
-        psi = farStreamfunction (this, R, Th);
-        [ur, ut] = nearVelocityField(this, R, Th);
-        [ur, ut] = farVelocityField(this, R, Th);
+        psi = streamFunction_A(this, R, Th);
+        psi = streamFunction_B (this, R, Th);
+        [ur, ut] = velocityField_B(this, R, Th);
+        [ur, ut] = velocityField_A(this, R, Th);
     end
     
     % Graphing methods

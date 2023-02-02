@@ -8,10 +8,10 @@ function fig = graphStreamlines(this, fcnName)
 
 
     switch(fcnName)
-        case 'near'
-            [Ur, Ut] = this.nearVelocityField;
-        case 'far'
-            [Ur, Ut] = this.farVelocityField;
+        case 'B'
+            [Ur, Ut] = this.velocityField_B;
+        case 'A'
+            [Ur, Ut] = this.velocityField_A;
     end
 
     % Generate a new figure

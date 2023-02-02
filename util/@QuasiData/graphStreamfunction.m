@@ -5,10 +5,10 @@ function fig = graphStreamfunction(this, fcnName)
 
     % Fetch streamfunction
     switch(fcnName)
-        case 'near'
-            psi = this.nearStreamfunction(this.VelData.R, this.VelData.Th);
-        case 'far'
-            psi = this.farStreamfunction(this.VelData.R, this.VelData.Th);
+        case 'B'
+            psi = this.streamFunction_B(this.VelData.R, this.VelData.Th);
+        case 'A'
+            psi = this.streamFunction_A(this.VelData.R, this.VelData.Th);
     end
 
 
