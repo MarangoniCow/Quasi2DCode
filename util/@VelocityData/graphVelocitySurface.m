@@ -32,12 +32,12 @@ function fig = graphVelocitySurface(this, velComponentStr)
     end
     
     fig = figure;
-    surf(X', Y', Z);
+    surf(X', Y', Z, 'EdgeAlpha', 0.15);
     
-    s = plotdefaults;
-    xlabel('$x$', 'interpreter', 'latex', 'FontSize', s.std.FontSizeLab);
-    ylabel('$y$', 'interpreter', 'latex', 'FontSize', s.std.FontSizeLab);
-    zlabel(['$', velComponentStr, '$'], 'interpreter', 'latex', 'FontSize', s.std.FontSizeLab);
+    
+    xlabel('$x$', 'interpreter', 'latex', 'FontSize', PlotDefaults.std.FontSizeLab);
+    ylabel('$y$', 'interpreter', 'latex', 'FontSize', PlotDefaults.std.FontSizeLab);
+    zlabel(['$', velComponentStr, '$'], 'interpreter', 'latex', 'FontSize', PlotDefaults.std.FontSizeLab);
 
     ax = gca;
     D = ax.DataAspectRatio;
