@@ -89,7 +89,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
         this.colloidRadius = a;
         this.colloidVelocity = U;
 
-        [Xc, Yc] = generateRadialXYPoints(x0, y0, a + p.Results.exclusionRadius);
+        [Xc, Yc] = generateRadialXYPoints(x0, y0, a + 10);
         
         % Generate idx list of points
         idxList = [];
