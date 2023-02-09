@@ -158,31 +158,29 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                 guessB  = [1];
             case 2
                 guessA  = [1, -0.1, 1, 100];
-                guessB  = [0.1 -0.1];
+                guessB  = [1 100];
             case 3
                 guessA  = [1, -0.1, 10, 1, 100, 10];
-                guessB  = [0.1, -0.1, 10];
+                guessB  = [1, 100, 1000];
             case 4
                 guessA  = [2, -0.1, 10, 0.1, 1, 100, 10, 0.1];
-                guessB  = [0.1, -0.1, 10, 0.1];
+                guessB  = [1, 100, 1000, 10000];
         end
         
 
         % fminsearch options
-        options = optimset('MaxFunEvals', 300*length(guessA), 'MaxIter', 300*length(guessA), 'TolX', p.Results.errorTol);
+        options = optimset('MaxFunEvals', 300*length(guessA), 'MaxIter', 300*length(guessA), 'TolFun', p.Results.errorTol);
         
         % Run fminsearch
         switch p.Results.approximationType
             case 'A'
-                [this.CoeffA, ~, ~, this.statsA]  = fminsearch(@Q2D_Approximation_A, guessA, options);
+                [this.CoeffA, CoeffStruct.Fminsum, ~, this.statsA]  = fminsearch(@Q2D_Approximation_A, guessA, options);
                 CoeffStruct.Coefficients = this.CoeffA;
                 CoeffStruct.Fminstats = this.statsA;
-                CoeffStruct.Fminsum = Q2D_Approximation_A(this.CoeffA);
             case 'B'
-                [this.CoeffB, ~, ~, this.statsB] = fminsearch(@Q2D_Approximation_B, guessB, options);
+                [this.CoeffB, CoeffStruct.Fminsum, ~, this.statsB] = fminsearch(@Q2D_Approximation_B, guessB, options);
                 CoeffStruct.Coefficients = this.CoeffB;
                 CoeffStruct.Fminstats = this.statsB;
-                CoeffStruct.Fminsum = Q2D_Approximation_A(this.CoeffB);
         end
 
         
@@ -306,6 +304,11 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                     B1 = B(1);
                     B2 = B(2);
                     B3 = 0;
+                    B4 = 0;
+                case 3
+                    B1 = B(1);
+                    B2 = B(2);
+                    B3 = B(3);
                     B4 = 0;
                 case 3
                     B1 = B(1);

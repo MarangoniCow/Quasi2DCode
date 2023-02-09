@@ -18,7 +18,7 @@ function graphResidues(this, fcnName)
 
 
     % Check for defiend parameters
-    this.checkForParameters;
+    this.checkForParameters(fcnName);
     
     % Fetch coordinates
     X = this.VelData.X;

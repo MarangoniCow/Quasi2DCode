@@ -25,6 +25,11 @@ function [ur, ut] = velocityField_B(this)
                     B1 = B(1);
                     B2 = B(2);
                     B3 = B(3);
+                    B4 = 0;
+                case 4
+                    B1 = B(1);
+                    B2 = B(2);
+                    B3 = B(3);
                     B4 = B(4);
 
                 otherwise
