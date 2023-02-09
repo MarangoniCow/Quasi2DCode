@@ -282,8 +282,9 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                 
                 % Summation
                 f = f + sqrt((Vr(idx) - ur).^2 + (Vt(idx) - ut).^2);
-                f = f./N;
+                
             end
+            f = f./N;
         end
     
         function f = Q2D_Approximation_B(B)
@@ -357,7 +358,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                         B4.*sin(4*theta).*(4.*r.^-5 + a.^-4.*BKD4);
             
                 f = f + (Vr(idx) - ur).^2 + (Vt(idx) - ut).^2;
-                f = f./N;
             end
+            f = f./N;
         end
 end
