@@ -157,19 +157,19 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                 guessA  = [1, 1];
                 guessB  = [1];
             case 2
-                guessA  = [1, 100, 1, 100];
-                guessB  = [1, 100];
+                guessA  = [1, -0.1, 1, 100];
+                guessB  = [0.1 -0.1];
             case 3
-                guessA  = [1, 100, 10, 1, 100, 10];
-                guessB  = [1, 100, 10];
+                guessA  = [1, -0.1, 10, 1, 100, 10];
+                guessB  = [0.1, -0.1, 10];
             case 4
-                guessA  = [1, 100, 10, 0.1, 1, 100, 10, 0.1];
-                guessB  = [1, 100, 10, 0.1];
+                guessA  = [2, -0.1, 10, 0.1, 1, 100, 10, 0.1];
+                guessB  = [0.1, -0.1, 10, 0.1];
         end
         
 
         % fminsearch options
-        options = optimset('MaxFunEvals', 300*length(guessA), 'MaxIter', 300*length(guessA));
+        options = optimset('MaxFunEvals', 300*length(guessA), 'MaxIter', 300*length(guessA), 'TolX', p.Results.errorTol);
         
         % Run fminsearch
         switch p.Results.approximationType
@@ -231,7 +231,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                     B1 = B(1);
                     B2 = B(2);
                     B3 = B(3);
-                    B4 = B(4)
+                    B4 = B(4);
                     C1 = B(5);
                     C2 = B(6);
                     C3 = B(7);
@@ -351,10 +351,10 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
 
 
                 % Define angular component
-                ut =    B1.*sin(1*theta).*(1.*r^-2 + a.^-1.*BKD1) - U.*a.*sin(theta).*BKD1 + ...
-                        B2.*sin(2*theta).*(2.*r^-3 + a.^-2.*BKD2) + ...
-                        B3.*sin(3*theta).*(2.*r^-4 + a.^-3.*BKD3) + ...
-                        B4.*sin(4*theta).*(4.*r^-5 + a.^-4.*BKD4);
+                ut =    B1.*sin(1*theta).*(1.*r.^-2 + a.^-1.*BKD1) - U.*a.*sin(theta).*BKD1 + ...
+                        B2.*sin(2*theta).*(2.*r.^-3 + a.^-2.*BKD2) + ...
+                        B3.*sin(3*theta).*(2.*r.^-4 + a.^-3.*BKD3) + ...
+                        B4.*sin(4*theta).*(4.*r.^-5 + a.^-4.*BKD4);
             
                 f = f + (Vr(idx) - ur).^2 + (Vt(idx) - ut).^2;
                 f = f./N;

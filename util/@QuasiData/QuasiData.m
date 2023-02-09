@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ========================== CLASS: Q2DDATA ===============================CoeffApsi_A
+% ========================== CLASS: QUASI2DDATA ===============================
 %
 % Class to encapsulate methods for Quasi-2D parameter estimations
 %
@@ -25,10 +25,8 @@ classdef QuasiData < matlab.mixin.SetGet
         VelData             % VelocityData object
         CoeffA              % A-field coefficients
         CoeffB              % B-field coefficients
-        psi_B
-        psi_A
-        stats_B
-        stats_A
+        statsB
+        statsA
         lambda
         colloidRadius
         colloidVelocity
@@ -47,9 +45,14 @@ classdef QuasiData < matlab.mixin.SetGet
             end
         end
 
-        function checkForParameters(this)
-            if isempty(this.CoeffA) || isempty(this.CoeffB)
+        function checkForParameters(this, fcnName)
+            
+            if nargin < 2 && isempty(this.CoeffA) || isempty(this.CoeffB)
                 error('Parameters undefined');
+            elseif strcmp('A', fcnName) && isempty(this.CoeffA)
+                error('Approximation A coefficients undefined')
+            elseif strcmp('B', fcnName) && isempty(this.CoeffB)
+                error('Approximation B coefficients undefined')
             end
         end
     end
