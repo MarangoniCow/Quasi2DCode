@@ -23,12 +23,12 @@ classdef QuasiData < matlab.mixin.SetGet
 
     properties
         VelData             % VelocityData object
-        CoeffA
-        CoeffB
-        StatsA
-        StatsB
-        velocityField_A
-        velocityField_B
+        CoeffA              % A-field coefficients
+        CoeffB              % B-field coefficients
+        psi_B
+        psi_A
+        stats_B
+        stats_A
         lambda
         colloidRadius
         colloidVelocity
@@ -47,13 +47,9 @@ classdef QuasiData < matlab.mixin.SetGet
             end
         end
 
-        function checkForParameters(this, ApproxStr)
-            if nargin < 2 && isempty(this.CoeffA) || isempty(this.CoeffB)
+        function checkForParameters(this)
+            if isempty(this.CoeffA) || isempty(this.CoeffB)
                 error('Parameters undefined');
-            elseif strcmp(ApproxStr, 'A') && isempty(this.CoeffA)
-                error('Coefficients A undefined');
-            elseif strcmp(ApproxStr, 'B') && isempty(this.CoeffB)
-                error('Coefficients B undefined');
             end
         end
     end
