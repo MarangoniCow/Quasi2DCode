@@ -3,6 +3,10 @@
 function graphResidues(this, fcnName)
 
 
+    % Check for defined parameters
+    this.checkForParameters(fcnName);
+
+    % Fetch the correct velocity field
     switch(fcnName)
         case 'B'
             [Ur, Ut] = this.velocityField_B;
@@ -13,34 +17,34 @@ function graphResidues(this, fcnName)
     % Generate a new figure
     fig = figure;
 
+    % Fetch angular and radial coordinates
     Th = this.VelData.Th;
     R = this.VelData.R;
 
-
-    % Check for defiend parameters
-    this.checkForParameters(fcnName);
-    
-    % Fetch coordinates
+    % Fetch cartesian coordinates
     X = this.VelData.X;
     Y = this.VelData.Y;
-    Vx = this.VelData.velocityPlanePolar(:, :, 1);
-    Vy = this.VelData.velocityPlanePolar(:, :, 2);
 
+
+    
+    
+    % Fetch simulation velocity
+    Vx = this.VelData.velocityPlaneCartesian(:, :, 1);
+    Vy = this.VelData.velocityPlaneCartesian(:, :, 2);
+
+    % Convert approximation velocity
     Ux =    Ur.*cos(Th) - Ut.*sin(Th);
     Uy =    Ur.*sin(Th) + Ut.*cos(Th);
 
+    % Normalise
     Ux = Ux./max(Ux);
     Uy = Uy./max(Uy);
-
     Vx = Vx./max(Vx);
     Vy = Vy./max(Vy);
 
-    
-
-
+    % Find difference 
     Wx = Vx - Ux;
     Wy = Vy - Uy;
-    
     
     % Colourmap plot: absolute value of velocity.    
     hold on
@@ -64,6 +68,6 @@ function graphResidues(this, fcnName)
     PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
 
-    title(['Streamline residues for ', fcnName, 'field, ID: ' this.VelData.seriesID], 'interpreter', 'none')
+    title(['Streamline residues for ', fcnName, 'approximation, ID: ' this.VelData.seriesID], 'interpreter', 'none')
 
 end
