@@ -100,6 +100,35 @@ classdef QuasiMeta < handle
 
         end
 
+        function graphStreamlineModes(this, POIval, order)
+            load(this.fetchLoadStr);
+
+            Coeffs = this.Coefficients{POIval};
+            r = length(Coeffs);
+
+            idxList = 1:r;
+            
+            
+            if order ~= 0
+                idxList(order) = [];
+                QuasiObj.colloidVelocity = 0;
+            end
+
+            Coeffs(idxList) = 0;
+
+            QuasiObj.(['Coeff', this.ApproxType]) = Coeffs;
+
+            QuasiObj.graphStreamlines(this.ApproxType);
+
+                    
+                    
+
+            
+
+
+
+        end
+
         function graphResidues(this, idx)
 
             load(this.fetchLoadStr);
