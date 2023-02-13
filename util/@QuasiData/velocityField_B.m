@@ -16,21 +16,31 @@ function [ur, ut] = velocityField_B(this)
                     B2 = 0;
                     B3 = 0;
                     B4 = 0;
+                    B0 = 0;
                 case 2
                     B1 = B(1);
                     B2 = B(2);
                     B3 = 0;
                     B4 = 0;
+                    B0 = 0;
                 case 3
                     B1 = B(1);
                     B2 = B(2);
                     B3 = B(3);
                     B4 = 0;
+                    B0 = 0;
                 case 4
                     B1 = B(1);
                     B2 = B(2);
                     B3 = B(3);
                     B4 = B(4);
+                    B0 = 0;
+                case 5
+                    B1 = B(1);
+                    B2 = B(2);
+                    B3 = B(3);
+                    B4 = B(4);
+                    B0 = B(5);
 
                 otherwise
                     error('Undetermined number of coefficients')
@@ -59,14 +69,16 @@ function [ur, ut] = velocityField_B(this)
     ur =    1*B1.*cos(1.*theta)./r.*(r.^-1 - a.^-1.*BK1) + U.*a.*cos(theta)./r.*BK1 + ...
             2*B2.*cos(2.*theta)./r.*(r.^-2 - a.^-2.*BK2) + ...
             3*B3.*cos(3.*theta)./r.*(r.^-3 - a.^-3.*BK3) + ...
-            4*B4.*cos(4.*theta)./r.*(r.^-4 - a.^-4.*BK4);
+            4*B4.*cos(4.*theta)./r.*(r.^-4 - a.^-4.*BK4) + ...
+            B0.*cos(theta);
 
 
     % Define angular component
     ut =    B1.*sin(1*theta).*(1.*r.^-2 + a.^-1.*BKD1) - U.*a.*sin(theta).*BKD1 + ...
             B2.*sin(2*theta).*(2.*r.^-3 + a.^-2.*BKD2) + ...
             B3.*sin(3*theta).*(3.*r.^-4 + a.^-3.*BKD3) + ...
-            B4.*sin(4*theta).*(4.*r.^-5 + a.^-4.*BKD4);
+            B4.*sin(4*theta).*(4.*r.^-5 + a.^-4.*BKD4) - ...
+            B0.*sin(theta);
 
     %  Set velocity to zero where the colloid is
     Vr = this.VelData.velocityPlanePolar(:, :, 1);

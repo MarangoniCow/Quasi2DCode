@@ -62,7 +62,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
 
         % Solve order
         solveOrderDefault = 2;
-        solveOrderMax = 4;
+        solveOrderMax = 5;
         solveOrderValidation = @(x) isPositiveIntegerValuedNumeric(x) && x > 0 && x <= solveOrderMax;
         p.addOptional('solveOrder', solveOrderDefault, solveOrderValidation);
 
@@ -165,6 +165,9 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
             case 4
                 guessA  = [2, -0.1, 10, 0.1, 1, 100, 10, 0.1];
                 guessB  = [1, 100, 1000, 10000];
+            case 5
+                guessA  = [2, -0.1, 10, 0.1, 1, 100, 10, 0.1];
+                guessB  = [1, 100, 1000, 10000, 1];
         end
         
 
@@ -300,21 +303,31 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                     B2 = 0;
                     B3 = 0;
                     B4 = 0;
+                    B0 = 0;
                 case 2
                     B1 = B(1);
                     B2 = B(2);
                     B3 = 0;
                     B4 = 0;
+                    B0 = 0;
                 case 3
                     B1 = B(1);
                     B2 = B(2);
                     B3 = B(3);
                     B4 = 0;
+                    B0 = 0;
                 case 4
                     B1 = B(1);
                     B2 = B(2);
                     B3 = B(3);
                     B4 = B(4);
+                    B0 = 0;
+                case 5
+                    B1 = B(1);
+                    B2 = B(2);
+                    B3 = B(3);
+                    B4 = B(4);
+                    B0 = B(5);
 
                 otherwise
                     error('Undetermined number of coefficients')
@@ -351,14 +364,16 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                 ur =    1*B1.*cos(1*theta)./r.*(r.^-1 - a.^-1.*BK1) + U.*a.*cos(theta)./r.*BK1 + ...
                         2*B2.*cos(2*theta)./r.*(r.^-2 - a.^-2.*BK2) + ...
                         3*B3.*cos(3*theta)./r.*(r.^-3 - a.^-3.*BK3) + ...
-                        4*B4.*cos(4*theta)./r.*(r.^-4 - a.^-4.*BK4);
+                        4*B4.*cos(4*theta)./r.*(r.^-4 - a.^-4.*BK4) + ...
+                        B0.*cos(theta);
 
 
                 % Define angular component
                 ut =    B1.*sin(1*theta).*(1.*r.^-2 + a.^-1.*BKD1) - U.*a.*sin(theta).*BKD1 + ...
                         B2.*sin(2*theta).*(2.*r.^-3 + a.^-2.*BKD2) + ...
                         B3.*sin(3*theta).*(3.*r.^-4 + a.^-3.*BKD3) + ...
-                        B4.*sin(4*theta).*(4.*r.^-5 + a.^-4.*BKD4);
+                        B4.*sin(4*theta).*(4.*r.^-5 + a.^-4.*BKD4) - ...
+                        B0.*sin(theta);
             
                 f = f + (Vr(idx) - ur).^2 + (Vt(idx) - ut).^2;
             end
