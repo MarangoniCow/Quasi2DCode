@@ -1,7 +1,27 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ======================= CLASS: QUASIMETA ===============================
+%
+% QuasiMeta captures changes in QuasiData objects over some paramer of
+% interest. For example, QuasiMeta can capture the changes in Fminsum or
+% Coefficients as the exclusionRadius, solveOrder or errorTol options are
+% iterated in QuasiData.estimateStreamFunction. 
+%
+% MEMBER VARIABELS
+%   QuasiDataObj        - QuasiData is a handle class, so we can safely store a reference to the object in question here
+%   ApproxType          - QuasiData can handle multiple different approximations, but QuasiMeta can only keep track of
+%                         one these.
+%   seriesID            - Repeated data from QuasiDataObj
+%   POI                 - Parameter Of Interest: QuasiMeta can only track changes in Coefficients and Fminsum for one
+%                           type of parameter. This quantity must be a string and correspond to a QuasiData parameter.
+%   POIval              - POI value:    Value(s) corresponding to the POI.
+%   N                   - Number of values.
+
+
 classdef QuasiMeta < handle
-    % QuasiMeta: Meta-info class to encapsulate QuasiData methods
+   
 
     properties (Access = public)
+        QuasiDataObj
         ApproxType
         seriesID
         QuasiObjFolderStr
@@ -18,6 +38,7 @@ classdef QuasiMeta < handle
     methods
         function this = QuasiMeta(QuasiDataObj, ApproxType, POI)
             % Fetch QuasiDataObj information
+            this.QuasiDataObj = QuasiDataObj;
             this.ApproxType = ApproxType;
             this.seriesID   = QuasiDataObj.VelData.seriesID;
             this.POI        = POI;
@@ -52,79 +73,118 @@ classdef QuasiMeta < handle
         end
 
 
-        function graphCoefficients(this, order)
+        function fig = graphCoefficients(this, order)
+            % GRAPHCOEFFICIENTS(this, order)
+            %
+            % Graph changes in coefficients over POIval. Coefficients are factorised into dimensions of velocity.
 
-            load(this.fetchLoadStr);
-            a = QuasiObj.colloidRadius;
-            
+            % Local variable
+            a = this.QuasiDataObj.colloidRadius;
+
+            % Initialise coefficients and factor
             C = zeros(1, this.N);
 
-            factor = a^(order - 1);
-                       
-
-            for i = 1:length(C)
-                C(i) = this.Coefficients{i}(order)/factor;
-            end
-
-            plot(C, 'DisplayName', ['Order ', num2str(order)]);
-
-            xlabel(this.POI);
-            ylabel(['Coefficients order $\mathcal{O}(', num2str(order), ')$'], 'interpreter', 'latex');
-
-            
-        end
-
-        function graphFminsum(this)
-            
-            U = this.avgSimulationVelocity;
-
-            plot(this.Fminsum./U, 'DisplayName', this.seriesID);
-
-            xlabel(this.POI);
-            ylabel('Fminsum');
-
-
-        end
-
-        function graphStreamlines(this, idx)
-
-            load(this.fetchLoadStr);
-
-            if nargin > 1
-                this.assignCoefficients(QuasiObj, idx);
-                QuasiObj.graphStreamlines(this.ApproxType);
+            if nargin < 2
+                orderList = 1:length(this.Coefficients{1});
             else
-                QuasiObj.VelData.graphStreamlines;
+                orderList = order;
             end
 
+            fig = figure;
+            colormap spring
+
+            for i = 1:length(orderList)
+                order = orderList(i);
+
+                % TO DO: Re-write order of coefficients, or make special case for correct factor for B0
+                factor = a^(order - 1);
+    
+                % Fetch coefficients
+                for j = 1:length(C)
+                    C(j) = this.Coefficients{j}(order)/factor;
+                end
+                
+                % TO DO: Re-write: Shift all coefficients up by one, so B0 becomes order 1 (numerically)
+                DispStr = ['Order ', num2str(order)];
+                plot(this.POIval, C, 'DisplayName', DispStr, 'LineWidth', PlotDefaults.std.LineWidth);
+                hold on;               
+            end
+
+            hold off;
+
+            % PLOTDEFAULTS: Must be added to path
+            xlabel(this.POI, 'FontSize', PlotDefaults.std.FontSizeLab, 'Interpreter', 'latex');
+            ylabel('Approximation Coefficients', 'FontSize', PlotDefaults.std.FontSizeLab, 'Interpreter', 'latex');
+            legend('FontSize', PlotDefaults.std.FontSizeLeg);
+            PlotDefaults.applySizes('std')
+            PlotDefaults.setLatexDefault;
+            grid on;
 
         end
 
-        function graphStreamlineModes(this, POIval, order)
-            load(this.fetchLoadStr);
+        function fig = graphFminsum(this)
+            % GRAPHFMINSUM(this)
+            %
+            % Graph Fminsum over POIval
 
-            Coeffs = this.Coefficients{POIval};
-            r = length(Coeffs);
+            fig = figure;
+            
+            Vbar = this.QuasiDataObj.VelData.avgSimulationVelocity;
 
-            idxList = 1:r;
-            
-            
-            if order ~= 0
-                idxList(order) = [];
-                QuasiObj.colloidVelocity = 0;
+            plot(this.POIval, this.Fminsum./Vbar, 'LineWidth', PlotDefaults.std.LineWidth);
+
+            % PLOTDEFAULTS: Must be added to path to work!
+            xlabel(this.POI, 'FontSize', PlotDefaults.std.FontSizeLab, 'Interpreter', 'latex');
+            ylabel('Fminsum', 'FontSize', PlotDefaults.std.FontSizeLab, 'Interpreter', 'latex');
+            PlotDefaults.applySizes('std')
+            PlotDefaults.setLatexDefault;
+            grid on;
+        end
+
+        function fig = graphStreamlines(this, POIvalIDX)
+            % GRAPHSTREAMLINES(this, POIvalIDX)
+            %
+            % Graph the streamlines with the coefficients of the associated POIval, accessed by index
+
+            if nargin < 2
+                this.QuasiDataObj.VelData.graphStreamlines;
+            else
+                this.assignCoefficients(POIvalIDX);
+                fig = this.QuasiDataObj.graphStreamlines(this.ApproxType);
             end
+        end
 
-            Coeffs(idxList) = 0;
+        function fig = graphStreamlineModes(this, POIvalIDX, order)
+            % GRAPHSTREAMLINEMODES(this, POIvalIDX, order)
+            %
+            % Graph the streamline modes individually
 
-            QuasiObj.(['Coeff', this.ApproxType]) = Coeffs;
+            % Check validity of order
+            order = int16(order);
+            validateattributes(order, {'int16'}, {'positive'})
 
-            QuasiObj.graphStreamlines(this.ApproxType);
+            % Fetch coefficients
+            M = length(this.Coefficients{1});
+            Coeff = this.Coefficients{POIvalIDX}(:);
+            Coeff(1:M ~= order) = 0;
 
-                    
-                    
 
+            % Assign coefficients to QuasiDataObj
+            CoeffStr = ['Coeff', this.ApproxType];
+            this.QuasiDataObj.(CoeffStr) = Coeff;
+
+            % Temporarily set colloidVelocity to zero
+            colloidVelocity = this.QuasiDataObj.colloidVelocity;
+            this.QuasiDataObj.colloidVelocity = 0;
+
+            % Graph streamlines
+            this.QuasiDataObj.graphStreamlines(this.ApproxType)
+
+            % Return colloidVelocity to original value
+            this.QuasiDataObj.colloidVelocity = colloidVelocity;
             
 
+            
 
 
         end
@@ -139,30 +199,17 @@ classdef QuasiMeta < handle
 
         end
 
-        function Vbar = avgSimulationVelocity(this)
-
-            load(this.fetchLoadStr)
-
-            Vs = QuasiObj.VelData.velocityPlaneCartesian(:);
-            Vbar = 0;
-
-            for i = 1:length(Vs)
-                Vbar = Vbar + Vs(i);
-            end
-            Vbar = Vbar/length(Vs);
-
-
-        end
+        
 
         function str = fetchLoadStr(this)
             str = ['/Development/repos/Quasi2DCode/Data/', this.seriesID];          
                 
         end
 
-        function assignCoefficients(this, QuasiObj, order)
+        function assignCoefficients(this, order)
             
             CoeffStr = ['Coeff', this.ApproxType];
-            QuasiObj.(CoeffStr) = this.Coefficients{order};
+            this.QuasiDataObj.(CoeffStr) = this.Coefficients{order};
 
 
         end

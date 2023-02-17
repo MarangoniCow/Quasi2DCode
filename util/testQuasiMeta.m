@@ -22,7 +22,7 @@ for k = 3:length(solveOrder)
         load(fullfile(folderStr, fileNames{i}));
         
         
-        QMO = QuasiMeta(QuasiObj, 'B', 'exclusionRadius');
+        QMO = QuasiMeta(QuasiObj, 'B', 'exclusionRadius'); 
     
     
         parfor j = 1:length(exclusionRadius)

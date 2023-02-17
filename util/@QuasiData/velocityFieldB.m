@@ -26,7 +26,7 @@ function [ur, ut] = velocityFieldB(this)
 %          Add U terms
         if n == 1
             ur = ur + U.*a.*cos(theta)./r.*BK;
-            ut = ur - U.*a.*sin(theta).*BKD;
+            ut = ut - U.*a.*sin(theta).*BKD;
         end
         
         % Radial and angular velocities
