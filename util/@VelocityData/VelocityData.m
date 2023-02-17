@@ -154,6 +154,25 @@ classdef VelocityData < LudwigData
                 error('Polar velocity plane not extracted');
             end
         end
+
+        function Vbar = avgSimulationVelocity(this)
+            % avgSimulationVelocity
+            %
+            % Fetch the average simulation velocity, Vbar, over all latice points.
+            
+            % Check for cartesianPlane existance
+            this.checkForCartesianPlane;
+
+            % Sum over all lattice points          
+            Vs = this.velocityPlaneCartesian(:);
+            Vbar = 0;
+            for i = 1:length(Vs)
+                Vbar = Vbar + Vs(i);
+            end
+
+            % Divide by total number of points for Vbar
+            Vbar = Vbar/length(Vs);
+        end
     end
 
 
