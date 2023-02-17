@@ -1,5 +1,5 @@
 
-function [ur, ut] = velocityField_A(this, r, theta)
+function [ur, ut] = velocityFieldA(this, r, theta)
 
 
     if nargin == 1

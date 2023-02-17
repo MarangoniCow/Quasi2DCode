@@ -61,8 +61,8 @@ classdef QuasiData < matlab.mixin.SetGet
     methods
         psi = streamFunction_A(this, R, Th);
         psi = streamFunction_B (this, R, Th);
-        [ur, ut] = velocityField_B(this, R, Th);
-        [ur, ut] = velocityField_A(this, R, Th);
+        [ur, ut] = velocityFieldB(this, R, Th);
+        [ur, ut] = velocityFieldA(this, R, Th);
     end
     
     % Graphing methods

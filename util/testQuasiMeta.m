@@ -1,34 +1,45 @@
 
 
+solveOrder = [2, 3, 4, 5, 6, 7, 8];
 
 folderStr = ['/Development/repos/Quasi2DCode/Data'];
-fileNames = {'3DP_Pu_Q2D_W_01.mat', '3DP_Pu_Q2D_W_04.mat' '3DP_Pu_Q2D_W_07.mat' ..., 
-            '3DP_Pu_Q2D_W_11.mat' '3DP_Pu_Q2D_W_15.mat'};
+fileNames = {'3DP_Pu_Q2D_W_01.mat', '3DP_Pu_Q2D_W_02.mat', '3DP_Pu_Q2D_W_03.mat', ...
+                '3DP_Pu_Q2D_W_04.mat', '3DP_Pu_Q2D_W_05.mat', '3DP_Pu_Q2D_W_06.mat'};
 
-% fileNames = {'3DP_Pu_Q2D_W_01.mat', '3DP_Pu_Q2D_W_15.mat'};
-exclusionRadius = 1:30;
+colloidRadius = 11.33;
 
-QMO_Struct = cell(1, length(fileNames));
-CoeffCell = cell(1, length(exclusionRadius));
-
-for i = 1:length(exclusionRadius)
-    load(fullfile(folderStr, fileNames{i}));
-    
-    
-    QMO = QuasiMeta(QuasiObj, 'B', 'exclusionRadius');
+exclusionRadius = 1:floor(4*colloidRadius);
 
 
-    parfor j = 1:length(exclusionRadius)
+
+for k = 3:length(solveOrder)
+
+    QMO_Struct = cell(1, length(fileNames));
+    str = ['QMO_order_', num2str(solveOrder(k))];
+    CoeffCell = cell(1, length(exclusionRadius));
+
+    for i = 1
+        load(fullfile(folderStr, fileNames{i}));
         
-        CoeffStruct = QuasiObj.estimateStreamFunction('solveOrder', 5, 'approximationType', 'B', 'exclusionRadius', exclusionRadius(j), 'errorTol', 1e-5);
-        CoeffCell{j} = CoeffStruct;
+        
+        QMO = QuasiMeta(QuasiObj, 'B', 'exclusionRadius');
+    
+    
+        parfor j = 1:length(exclusionRadius)
+            
+            CoeffStruct = QuasiObj.estimateStreamFunction('solveOrder', solveOrder(k), 'approximationType', 'B', 'exclusionRadius', exclusionRadius(j), 'errorTol', 1e-4);
+            CoeffCell{j} = CoeffStruct;
+        end
+    
+        for j = 1:length(exclusionRadius)
+            QMO.appendCoefficientStruct(CoeffCell{j}, exclusionRadius(j));
+        end
+    
+        QMO_Struct{i} = QMO;
+    
     end
 
-    for j = 1:length(exclusionRadius)
-        QMO.appendCoefficientStruct(CoeffCell{j}, exclusionRadius(j));
-    end
-
-    QMO_Struct{i} = QMO;
+    save(str, "QMO_Struct");
 
 end
 

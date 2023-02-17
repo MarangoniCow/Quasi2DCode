@@ -9,9 +9,9 @@ function fig = graphStreamlines(this, fcnName)
 
     switch(fcnName)
         case 'B'
-            [Ur, Ut] = this.velocityField_B;
+            [Ur, Ut] = this.velocityFieldB;
         case 'A'
-            [Ur, Ut] = this.velocityField_A;
+            [Ur, Ut] = this.velocityFieldA;
     end
 
     % Generate a new figure
