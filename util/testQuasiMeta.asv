@@ -1,0 +1,37 @@
+
+
+solveOrder = [2, 3, 4, 5, 6, 7, 8];
+
+folderStr = ['/Development/repos/Quasi2DCode/Data'];
+fileNames = {'3DP_Pu_Q2D_W_01.mat', '3DP_Pu_Q2D_W_04.mat' '3DP_Pu_Q2D_W_07.mat' ..., 
+            '3DP_Pu_Q2D_W_11.mat' '3DP_Pu_Q2D_W_15.mat'};
+
+colloidRadius = 11.33;
+
+exclusionRadius = 1:floor(4*colloidRadius);
+
+QMO_Struct = cell(1, length(fileNames));
+CoeffCell = cell(1, length(exclusionRadius));
+
+for i = 1:length(fileNames)
+    load(fullfile(folderStr, fileNames{i}));
+    
+    
+    QMO = QuasiMeta(QuasiObj, 'B', 'exclusionRadius');
+
+
+    parfor j = 1:length(exclusionRadius)
+        
+        CoeffStruct = QuasiObj.estimateStreamFunction('solveOrder', 4, 'approximationType', 'B', 'exclusionRadius', exclusionRadius(j), 'errorTol', 1e-4);
+        CoeffCell{j} = CoeffStruct;
+    end
+
+    for j = 1:length(exclusionRadius)
+        QMO.appendCoefficientStruct(CoeffCell{j}, exclusionRadius(j));
+    end
+
+    QMO_Struct{i} = QMO;
+
+end
+
+beep; pause(1); beep; pause(1); beep;

@@ -12,7 +12,7 @@ exclusionRadius = 1:floor(4*colloidRadius);
 
 
 
-for k = 3:length(solveOrder)
+for k = 1:length(solveOrder)
 
     QMO_Struct = cell(1, length(fileNames));
     str = ['QMO_order_', num2str(solveOrder(k))];
@@ -39,7 +39,7 @@ for k = 3:length(solveOrder)
     
     end
 
-    save(str, "QMO_Struct");
+    save(str, 'QMO_Struct');
 
 end
 
