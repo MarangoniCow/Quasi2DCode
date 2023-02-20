@@ -15,11 +15,21 @@ function fig = graphCoefficients(this, order)
                 orderList = order;
             end
 
+            
+            
+
             fig = figure;
             colormap spring
 
             for i = 1:length(orderList)
                 order = orderList(i);
+
+                % Special case: Deal with order 0:
+                if order == length(this.Coefficients{1})
+                    DispStr = ['Order 0'];
+                else
+                    DispStr = ['Order ', num2str(order)];
+                end
 
                 % TO DO: Re-write order of coefficients, or make special case for correct factor for B0
                 factor = a^(order - 1);
@@ -30,7 +40,7 @@ function fig = graphCoefficients(this, order)
                 end
                 
                 % TO DO: Re-write: Shift all coefficients up by one, so B0 becomes order 1 (numerically)
-                DispStr = ['Order ', num2str(order)];
+                
                 plot(this.POIval, C, 'DisplayName', DispStr, 'LineWidth', PlotDefaults.std.LineWidth);
                 hold on;               
             end

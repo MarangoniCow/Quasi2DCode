@@ -2,6 +2,6 @@
     % GRAPHRESIDUES(this, idx)
     %
     % Graph streamline residues 
-    this.assignCoefficients(QuasiObj, idx);
-    fig = QuasiObj.graphResidues(this.ApproxType);
+    this.assignCoefficients(idx);
+    this.QuasiDataObj.graphResidues(this.ApproxType);
 end

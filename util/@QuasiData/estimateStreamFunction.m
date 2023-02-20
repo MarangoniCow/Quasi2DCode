@@ -67,7 +67,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
 
     % Solve order
     solveOrderDefault = 2;
-    solveOrderMax = 5;
+    solveOrderMax = 10;
     solveOrderValidation = @(x) isPositiveIntegerValuedNumeric(x) && x > 0 && x <= solveOrderMax;
     p.addOptional('solveOrder', solveOrderDefault, solveOrderValidation);
 

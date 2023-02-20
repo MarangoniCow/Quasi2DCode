@@ -94,4 +94,9 @@ classdef QuasiMeta < handle
         fig = graphResidues(this, idx);
     end
 
+    methods (Static)
+        fig = compareStructCoefficients(QMO_Struct, order, dispStr, dispStrVal);
+        fig = compareStructFminsum(QMO_Struct, dispStr, dispStrVal);
+    end
+
 end
