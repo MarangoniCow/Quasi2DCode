@@ -185,6 +185,18 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
         if p.Results.includeDriftVelocity
             guess = [guess, 0.1];
         end
+    else
+
+        % Validate that guess is the correct length
+        if p.Results.includeDriftVelocity
+            L = p.Results.solveOrder + 1;
+        else
+            L = p.Results.solveOrder;
+        end
+
+        if L ~= length(guess)
+            error('FminGuess is incorrect length');
+        end
     end
     
 

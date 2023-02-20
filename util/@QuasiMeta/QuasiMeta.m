@@ -50,6 +50,7 @@ classdef QuasiMeta < handle
 
 
     methods
+       
         function appendCoefficientStruct(this, CoeffStruct, POIval)
 
             % Append new POIval number
@@ -92,6 +93,11 @@ classdef QuasiMeta < handle
         fig = graphStreamlines(this, POIvalIDX);
         fig = graphStreamlineModes(this, POIvalIDX, order);
         fig = graphResidues(this, idx);
+    end
+
+    methods % OTHER METHODS
+        generateQuasiCoefficients(this); 
+
     end
 
     methods (Static)
