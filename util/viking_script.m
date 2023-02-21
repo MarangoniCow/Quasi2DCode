@@ -1,5 +1,11 @@
 function viking_script(SCRIPTNAME)
 
+% VIKING_SCRIPT(SCRIPTNAME)
+%
+%
+% WARNING: NOT A STAND-ALONE FUNCTION. MUST BE EXPLICITLY CONFIGURED FOR EACH USE
+% CASE. CAN USE THE SERIES NUMBER TO INCLUDE OR EXCLUDE EXTRA INFORMATION.
+
 
 
 
@@ -31,20 +37,30 @@ function viking_script(SCRIPTNAME)
     % ----------------------------------------------------------------------- %
     %   Series non-specific information can be defined here
     % ----------------------------------------------------------------------- %
-        PlaneExtractIdx{1} = 1:384;
-        PlaneExtractIdx{2} = 28:227;
-        
-        ColloidRadius   = 11.33;  
-        
-        RetainVelData   = false;
-        
-        saveLocation    = '../Data';
+    
+    % System size: COULD BE OVERWRITTEN BY SERIES SPECIFIC INFORMATION
+    SystemSize              = [1600, 600, 48];
+
+    % x-Axis desired extraction
+    PlaneExtractIdx{1} = 1:1600;
+
+    % y-Axis desired extraction
+    PlaneExtractIdx{2} = 1:600;
+    
+    ColloidRadius   = 11.33;  
+    
+    RetainVelData   = false;
+    
+    saveLocation    = '../Data';
     
     
     % ----------------------------------------------------------------------- %
     %   Series specific information can be input here
     % ----------------------------------------------------------------------- %
     
+
+    
+
     % IGNORED
     switch(-1)
         case 1
@@ -81,12 +97,6 @@ function viking_script(SCRIPTNAME)
             error('Undetermined system size')
     end
 
-
-
-
-    SystemSize      = [384, 256, 64];
-
-    
     
     % ----------------------------------------------------------------------- %
     % ----------------------------------------------------------------------- %
