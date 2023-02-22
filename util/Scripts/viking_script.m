@@ -113,9 +113,13 @@ function viking_script(SCRIPTNAME)
     end
     
     
-    loadSimulationSeries(RootFolder, folderName, SystemSize, saveLocation, ...
+    QuasiObj = loadSimulationSeries(RootFolder, folderName, SystemSize, saveLocation, ...
                         'ColloidRadius', ColloidRadius, 'RetainVelData', RetainVelData, ...
                         'PlaneExtractIdx', PlaneExtractIdx);
+
+    % ----------------------------------------------------------------------- %
+    %   We can also estimate coefficients here, if we so wish
+    % ----------------------------------------------------------------------- %
 
 
 

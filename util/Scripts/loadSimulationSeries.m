@@ -22,7 +22,7 @@
 
 
 
-function S = loadSimulationSeries(RootFolder, FolderPattern, SystemSize, SaveLocation, varargin)
+function QuasiObj = loadSimulationSeries(RootFolder, FolderPattern, SystemSize, SaveLocation, varargin)
 
     % Input parser
     p = inputParser;
@@ -34,7 +34,7 @@ function S = loadSimulationSeries(RootFolder, FolderPattern, SystemSize, SaveLoc
     addRequired(p, 'SaveLocation')
 
     % Fetch common arguments
-    p = CommonQuasiArg(p);
+    p = QuasiData.CommonQuasiArg(p);
 
     % Parse inputs
     parse(p, RootFolder, FolderPattern, SystemSize, SaveLocation, varargin{:});
@@ -91,12 +91,12 @@ function S = loadSimulationSeries(RootFolder, FolderPattern, SystemSize, SaveLoc
     end
 
     % ------------------------------------------------------------------- %
-    %   Pass all varargin to QP_initialise and save the data
+    %   Pass all varargin to generateQuasiObj and save the data
     % ------------------------------------------------------------------- %
 
     for i = 1:N
 
-        [QuasiObj, ~] = QP_initialise(S(i).folder, SystemSize(i, :), ...
+        [QuasiObj, ~] = QuasiData.generateQuasiObj(S(i).folder, SystemSize(i, :), ...
                         'SimulationName', fetchSimulationName(S(i).folder), ...
                         varargin{:});
 

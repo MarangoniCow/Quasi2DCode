@@ -72,7 +72,9 @@ classdef QuasiData < matlab.mixin.SetGet
         fig = graphResidues(this, fcnName);
     end
 
-    methods (Access = private)
-        p = parseFunctionNames(p);
+    methods (Static)
+        p = CommonQuasiArg(p);
+        QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin);
     end
+
 end

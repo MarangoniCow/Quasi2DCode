@@ -1,5 +1,5 @@
 
-function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
+function [QuasiObj, VelObj] = generateQuasiObj(FolderStr, SystemSize, varargin)
     % ------------------------------------------------------------- %
     % ------------------------------------------------------------- %
     %       INITIALISE QUASI-PARAMETER FITTING VARIABLES 
@@ -21,7 +21,7 @@ function [QuasiObj, VelObj] = QP_initialise(FolderStr, SystemSize, varargin)
     addRequired(p, 'SystemSize', @(x) isnumeric(x) && length(x) == 3);
 
     % Fetch common args
-    p = CommonQuasiArg(p);
+    p = QuasiData.CommonQuasiArg(p);
 
     % Parse inputs
     parse(p, FolderStr, SystemSize, varargin{:});
