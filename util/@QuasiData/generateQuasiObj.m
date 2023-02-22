@@ -99,7 +99,7 @@ function [QuasiObj, VelObj] = generateQuasiObj(FolderStr, SystemSize, varargin)
     VelObj.extractVelocity;
     
     % Extract velocity plane
-    extractPlane(VelObj, t, zidx, xidx, yidx);
+    extractXYPlane(VelObj, t, zidx, xidx, yidx);
     
     % Convert to polar
     convertPolar(VelObj, x0, y0);

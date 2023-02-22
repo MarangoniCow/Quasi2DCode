@@ -121,6 +121,11 @@ function viking_script(SCRIPTNAME)
     %   We can also estimate coefficients here, if we so wish
     % ----------------------------------------------------------------------- %
 
+    QMO_Struct = QuasiMeta.generateQuasiCoefficients(QuasiObj);
+
+    str = [QuasiObj.VelData.seriesID, '_META'];
+    save(fullfile(saveLocation, str), 'QMO_Struct', '-v7.3')
+
 
 
 
