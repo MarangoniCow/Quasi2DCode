@@ -13,12 +13,14 @@
 
 classdef VelocityData < LudwigData
     properties
-        velocityPlaneCartesian       {mustBeNumeric}     % Cartesian velocity plane of form (x, y, t_step)
-        velocityPlanePolar           {mustBeNumeric}     % Polar velocity plane of the form (x, y, t_step)
+        velocityXZPlane              {mustBeNumeric}     % Cartersian velocity plane of the form (x, z, t_step)
+        velocityPlaneCartesian       {mustBeNumeric}     % Cartesian velocity plane of form (x, y, u)
+        velocityPlanePolar           {mustBeNumeric}     % Polar velocity plane of the form (x, y, u)
         x0                           {mustBeNumeric}     % Center of polar plane coordinates 
         y0                           {mustBeNumeric}     % Center of polar plane coordinates
         X                            {mustBeNumeric}     % X Carterisian coordinates for velocity plane
         Y                            {mustBeNumeric}     % Y Carterisian coordinates for velocity plane
+        Z                            {mustBeNumeric}     % Z Carterisian coordinates for XZ velocity plane
         R                            {mustBeNumeric}     % R polar coordinates for velocity plane
         Th                           {mustBeNumeric}     % Theta polar coordinates for velocity plane
         timeStep

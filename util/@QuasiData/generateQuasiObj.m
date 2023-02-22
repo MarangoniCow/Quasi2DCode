@@ -89,17 +89,23 @@ function [QuasiObj, VelObj] = generateQuasiObj(FolderStr, SystemSize, varargin)
     zidx = closestelement(1:VelObj.systemSize(3), z0);
 
     if any(strcmp(p.UsingDefaults, 'PlaneExtractIdx'))
-        xidx = 1:VelObj.systemSize(1);
-        yidx = 1:VelObj.systemSize(2);
+        x_range = 1:VelObj.systemSize(1);
+        y_range = 1:VelObj.systemSize(2);
     else
-        xidx = p.Results.PlaneExtractIdx{1}; 
-        yidx = p.Results.PlaneExtractIdx{2}; 
+        x_range = p.Results.PlaneExtractIdx{1}; 
+        y_range = p.Results.PlaneExtractIdx{2}; 
     end
 
     VelObj.extractVelocity;
     
     % Extract velocity plane
-    extractXYPlane(VelObj, t, zidx, xidx, yidx);
+    VelObj.extractXYPlane(t, zidx, x_range, y_range);
+
+    % Extract XZ plane
+    a = p.Results.ColloidRadius;
+    z_range = 1:VelObj.systemSize(3);
+    yidx = [floor(y0 - 2*a):floor(a):floor(y0 + 2*a)];
+    VelObj.extractXZPlane(t, yidx, x_range, z_range);
     
     % Convert to polar
     convertPolar(VelObj, x0, y0);
