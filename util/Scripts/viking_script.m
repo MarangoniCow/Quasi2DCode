@@ -94,7 +94,7 @@ function viking_script(SCRIPTNAME)
         case 15
             SystemSize      = [384, 256, 160];
         otherwise
-            error('Undetermined system size')
+		warning('Using default system size')
     end
 
     
