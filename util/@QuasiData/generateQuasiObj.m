@@ -1,5 +1,5 @@
 
-function [QuasiObj, VelObj] = generateQuasiObj(FolderStr, SystemSize, varargin)
+function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
     % ------------------------------------------------------------- %
     % ------------------------------------------------------------- %
     %       INITIALISE QUASI-PARAMETER FITTING VARIABLES 
@@ -104,7 +104,7 @@ function [QuasiObj, VelObj] = generateQuasiObj(FolderStr, SystemSize, varargin)
     % Extract XZ plane
     a = p.Results.ColloidRadius;
     z_range = 1:VelObj.systemSize(3);
-    yidx = [floor(y0 - 2*a):floor(a):floor(y0 + 2*a)];
+    yidx = floor(y0 - 2*a):floor(a):floor(y0 + 2*a);
     VelObj.extractXZPlane(t, yidx, x_range, z_range);
     
     % Convert to polar
