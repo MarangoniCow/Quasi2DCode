@@ -73,6 +73,8 @@ function QuasiObj = loadSimulationSeries(RootFolder, FolderPattern, SystemSize, 
         for i = 1:N
             SystemSize(i, :) = SystemSize(1, :);
         end
+    elseif N < 1
+        error(['No files found in file pattern: ', f])
     end
 
 
