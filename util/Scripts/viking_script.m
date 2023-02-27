@@ -64,7 +64,7 @@ function viking_script(SCRIPTNAME)
     % IGNORED
     switch(seriesNumber)
         case 1
-          	SystemSize      = [384, 256, 48];
+          	SystemSize      = [1600, 600, 48];
         case 2
             SystemSize      = [384, 256, 56];
         case 3
