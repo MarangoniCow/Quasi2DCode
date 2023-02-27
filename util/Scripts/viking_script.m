@@ -44,18 +44,18 @@ function viking_script(SCRIPTNAME, VAR)
 
     switch VAR
         
-        case XL
+        case 'XL'
             
             SystemSize              = [1600, 600, 48];
             PlaneExtractIdx{1} = 1:1600;
             PlaneExtractIdx{2} = 1:600;
 
-        case H
+        case 'H'
             SystemSize = [384, 256, 64];
             PlaneExtractIdx{1} = 1:384;
             PlaneExtractIdx{2} = 20:236;
 
-        case W
+        case 'W'
 
             switch(seriesNumber)
                 case 1
