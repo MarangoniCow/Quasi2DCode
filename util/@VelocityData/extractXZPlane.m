@@ -38,8 +38,8 @@ function extractXZPlane(this, t_idx, y_idx, x_range, z_range)
             this.velocityXZPlane{i} = zeros(length(x_range), length(z_range));
             
             % Extract velocity data from LudwigData datatype 
-            this.velocityXZPlane{i}(:, :, 1) = this.velocityData{t_idx}(x_range, i, z_idx, 1);
-            this.velocityXZPlane{i}(:, :, 2) = this.velocityData{t_idx}(x_range, i, z_idx, 3);
+            this.velocityXZPlane{i}(:, :, 1) = this.velocityData{t_idx}(x_range, i, z_range, 1);
+            this.velocityXZPlane{i}(:, :, 2) = this.velocityData{t_idx}(x_range, i, z_range, 3);
         end
 
         % Set cartesian coordinates
