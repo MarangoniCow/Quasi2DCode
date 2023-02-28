@@ -111,7 +111,7 @@ function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
     convertPolar(VelObj, x0, y0);
 
     QuasiObj = QuasiData(VelObj);
-    QuasiObj.estimateStreamFunction(2);
+    
 
     % Delete raw data if requested
     if ~p.Results.RetainVelData

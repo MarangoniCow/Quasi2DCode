@@ -95,10 +95,9 @@ function QuasiObj = loadSimulationSeries(RootFolder, FolderPattern, SystemSize, 
     % ------------------------------------------------------------------- %
     %   Pass all varargin to generateQuasiObj and save the data
     % ------------------------------------------------------------------- %
-	disp(['N: ', num2str(N)])
-	disp('Pre_N')
+	
     for i = 1:N
-	disp('Post_N')
+	
         QuasiObj = QuasiData.generateQuasiObj(S(i).folder, SystemSize(i, :), ...
                         'SimulationName', fetchSimulationName(S(i).folder), ...
                         varargin{:});
