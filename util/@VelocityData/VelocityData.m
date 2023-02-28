@@ -13,7 +13,7 @@
 
 classdef VelocityData < LudwigData
     properties
-        velocityXZPlane                                 % Cartersian velocity plane of the form (x, z, t_step)
+        velocityYZPlane                                 % Cartersian velocity plane of the form (x, z, t_step)
         velocityPlaneCartesian       {mustBeNumeric}     % Cartesian velocity plane of form (x, y, u)
         velocityPlanePolar           {mustBeNumeric}     % Polar velocity plane of the form (x, y, u)
         x0                           {mustBeNumeric}     % Center of polar plane coordinates 
@@ -29,7 +29,7 @@ classdef VelocityData < LudwigData
     
     % Defined externally
     methods
-        extractXYPlane(this, t_idx, z_idx, x_range, y_range);
+        extractYZPlane(this, t_idx, z_idx, x_range, y_range);
     end
 
     methods
@@ -134,7 +134,6 @@ classdef VelocityData < LudwigData
         fig = graphVelocitySurface(this, velComponentStr);
         fig = graphQuiver(this)
         fig = graphStreamlines(this)
-        fig = graph
 
     end
     

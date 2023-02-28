@@ -1,4 +1,4 @@
-function extractXZPlane(this, t_idx, y_idx, x_range, z_range)
+function extractYZPlane(this, t_idx, x_idx, y_range, z_range)
         % extractPlane(this, t_idx, z_idx)
         %
         % Extracts the XZ plane perpendicular to the XY plane.
@@ -8,10 +8,10 @@ function extractXZPlane(this, t_idx, y_idx, x_range, z_range)
         %   this        - VelocityData object
         %   t_idx       - Point of time of interest
         %   y_idx       - Y points of interest
-        %   x_range     - (opt) Range of x
+        %   x_rangevelocityYZPlane     - (opt) Range of x
         %   z_range     - (opt) Range of z
         % OUTPUTS
-        %   Writes output to this.velocityXZPlane
+        %   Writes output to this.velocityYZPlane
 
         % Check system dimensions are defined before proceeding
         checkSysDim(this);
@@ -25,7 +25,7 @@ function extractXZPlane(this, t_idx, y_idx, x_range, z_range)
 
         % If not defined, validate x_range and y_range
         if nargin <= 3
-            x_range = 1:this.systemSize(1);
+            y_range = 1:this.systemSize(2);
             z_range = 1:this.systemSize(3);
         else
             % NEED BETTER ERROR CHECKING HERE
@@ -34,16 +34,16 @@ function extractXZPlane(this, t_idx, y_idx, x_range, z_range)
 
         
         % Initialise data types
-        for i = 1:length(y_idx)
-            this.velocityXZPlane{i} = zeros(length(x_range), length(z_range));
+        for i = 1:length(x_idx)
+            this.velocityYZPlane{i} = zeros(length(y_range), length(z_range));
             
             % Extract velocity data from LudwigData datatype 
-            this.velocityXZPlane{i}(:, :, 1) = this.velocityData{t_idx}(x_range, i, z_range, 1);
-            this.velocityXZPlane{i}(:, :, 2) = this.velocityData{t_idx}(x_range, i, z_range, 3);
+            this.velocityYZPlane{i}(:, :, 1) = this.velocityData{t_idx}(i, y_range, z_range, 2);
+            this.velocityYZPlane{i}(:, :, 2) = this.velocityData{t_idx}(i, y_range, z_range, 3);
         end
 
         % Set cartesian coordinates
-        [~, this.Z] = meshgrid(x_range, z_range);
+        [~, this.Z] = meshgrid(y_range, z_range);
 
         % Flip matricies (so we have x-dim by y-dim, strange Matlab
         % convention is to have it opposite when using meshgrid)

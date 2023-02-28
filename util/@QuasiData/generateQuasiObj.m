@@ -101,11 +101,11 @@ function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
     % Extract velocity plane
     VelObj.extractXYPlane(t, zidx, x_range, y_range);
 
-    % Extract XZ plane
+    % Extract YZ plane
     a = p.Results.ColloidRadius;
     z_range = 1:VelObj.systemSize(3);
-    yidx = floor(y0 - 2*a):floor(a):floor(y0 + 2*a);
-    VelObj.extractXZPlane(t, yidx, x_range, z_range);
+    xidx = floor(y0 - 2*a):floor(a):floor(y0 + 2*a);
+    VelObj.extractXZPlane(t, xidx, y_range, z_range);
     
     % Convert to polar
     convertPolar(VelObj, x0, y0);
