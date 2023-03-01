@@ -28,7 +28,7 @@ function fig = graphStreamlines(this, fcnName)
     % Colourmap plot: absolute value of velocity.    
     hold on
     Uabs = abs(Ur) + abs(Ut);
-    pcolor(X, Y, Uabs);
+    pcolor(X, Y, Uabs./max(Uabs));
     colormap parula
     shading interp
 

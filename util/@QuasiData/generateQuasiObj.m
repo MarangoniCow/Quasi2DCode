@@ -104,7 +104,7 @@ function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
     % Extract YZ plane
     a = p.Results.ColloidRadius;
     z_range = 1:VelObj.systemSize(3);
-    xidx = floor(y0 - 2*a):floor(a):floor(y0 + 2*a);
+    xidx = floor(x0 - 6*a):3*floor(a):floor(x0 + 6*a);
     VelObj.extractYZPlane(t, xidx, y_range, z_range);
     
     % Convert to polar

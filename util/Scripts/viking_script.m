@@ -57,7 +57,7 @@ function viking_script(SCRIPTNAME, VAR)
 
         case 'W'
 
-            switch(seriesNumber)
+            switch(num2str(seriesNumber))
                 case 1
           	        SystemSize      = [384, 256, 48];
                 case 2

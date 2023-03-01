@@ -49,7 +49,7 @@ function graphResidues(this, fcnName)
     % Colourmap plot: absolute value of velocity.    
     hold on
     Uabs = abs(Wx) + abs(Wy);
-    pcolor(X, Y, Uabs);
+    pcolor(X, Y, Uabs./max(Uabs));
     colormap parula
     shading interp
 

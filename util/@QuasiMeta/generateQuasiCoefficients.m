@@ -21,7 +21,7 @@ function QMO_Struct = generateQuasiCoefficients(QuasiDataObj, varargin)
     p.addOptional('exclusionRadius', exclusionDefault);
 
     % SOIval (SOI is always solve order)
-    solveDefault = [2, 4, 6, 8];
+    solveDefault = [2, 4];
     p.addOptional('solveOrder', solveDefault);
 
     % ApproximationType
@@ -36,7 +36,7 @@ function QMO_Struct = generateQuasiCoefficients(QuasiDataObj, varargin)
     exclusionRadius = p.Results.exclusionRadius;
     
     % Warnings
-    if any(strcmp('solveOrder', p.UsingDefaults))
+    if ~any(strcmp('solveOrder', p.UsingDefaults))
         warning('Ensure requested solveOrder is in multiples of two!')
     end
     

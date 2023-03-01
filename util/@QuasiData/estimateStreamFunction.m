@@ -60,13 +60,13 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     p.addOptional('approximationType', approximationDefault, approximationValidation);
 
     % Exclusion radius
-    exclusionDefault = this.colloidRadius;
+    exclusionDefault = 2*this.colloidRadius;
     exclusionMax = floor(0.5*(this.VelData.systemSize(2) - this.colloidRadius));
     exclusionValidation = @(x) isnumeric(x) && x >= 0 && x <= exclusionMax;
     p.addOptional('exclusionRadius', exclusionDefault, exclusionValidation);
 
     % Solve order
-    solveOrderDefault = 2;
+    solveOrderDefault = 4;
     solveOrderMax = 10;
     solveOrderValidation = @(x) isPositiveIntegerValuedNumeric(x) && x > 0 && x <= solveOrderMax;
     p.addOptional('solveOrder', solveOrderDefault, solveOrderValidation);

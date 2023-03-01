@@ -134,6 +134,7 @@ classdef VelocityData < LudwigData
         fig = graphVelocitySurface(this, velComponentStr);
         fig = graphQuiver(this)
         fig = graphStreamlines(this)
+        fig = graph3DVelocity(this)
 
     end
     
