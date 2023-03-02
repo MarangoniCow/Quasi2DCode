@@ -109,9 +109,14 @@ function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
     
     % Convert to polar
     convertPolar(VelObj, x0, y0);
-
     QuasiObj = QuasiData(VelObj);
-    QuasiObj.estimateStreamFunction;
+
+    % Assign remaining QuasiObj variables
+    QuasiObj.lambda = sqrt(VelObj.systemSize(3)^2/12);
+    QuasiObj.colloidRadius = a;
+    U = VelObj.colloidVel(:, VelObj.timeStep);
+    QuasiObj.colloidVelocity = sqrt(dot(U, U));
+
     
 
     % Delete raw data if requested

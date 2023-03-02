@@ -66,7 +66,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     p.addOptional('exclusionRadius', exclusionDefault, exclusionValidation);
 
     % Solve order
-    solveOrderDefault = 4;
+    solveOrderDefault = 2;
     solveOrderMax = 10;
     solveOrderValidation = @(x) isPositiveIntegerValuedNumeric(x) && x > 0 && x <= solveOrderMax;
     p.addOptional('solveOrder', solveOrderDefault, solveOrderValidation);
@@ -114,18 +114,13 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     % Fetch parameters
     x0 = this.VelData.x0;
     y0 = this.VelData.y0;
-    this.lambda = sqrt(this.VelData.systemSize(3)^2/12);
+    
     
     % Generate list of points to exclude
     a = this.VelData.colloid_a;
     U = this.VelData.colloidVel(:, this.VelData.timeStep);
     U = sqrt(dot(U, U));
-
-    this.colloidRadius = a;
-    this.colloidVelocity = U;
-
     
-
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %                   GENERATE EXCLUSION RADIUS                     %

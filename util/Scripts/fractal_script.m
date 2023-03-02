@@ -1,4 +1,4 @@
-function fractal_script(SCRIPTNAME, VAR, VelObj)
+function fractal_script(SCRIPTNAME, VAR)
 
 % VIKING_SCRIPT(SCRIPTNAME)
 %
@@ -16,7 +16,7 @@ function fractal_script(SCRIPTNAME, VAR, VelObj)
     % ----------------------------------------------------------------------- %
     % ----------------------------------------------------------------------- %
     
-    RootFolder  = '~/Documents/ludwig_viking_data';
+    RootFolder  = '~/Documents/ludwig_viking_data/';
     
     folderName   = [SCRIPTNAME, '/data'];
     
@@ -39,7 +39,7 @@ function fractal_script(SCRIPTNAME, VAR, VelObj)
     % ----------------------------------------------------------------------- %
     
     ColloidRadius   = 11.33;  
-    RetainVelData   = false;
+    RetainVelData   = true;
     saveLocation    = '../Data';
 
     switch VAR
@@ -57,7 +57,7 @@ function fractal_script(SCRIPTNAME, VAR, VelObj)
 
         case 'W'
 
-            switch(seriesNumber)
+            switch(num2str(seriesNumber))
                 case 1
           	        SystemSize      = [384, 256, 48];
                 case 2
@@ -119,8 +119,8 @@ function fractal_script(SCRIPTNAME, VAR, VelObj)
 
     QMO_Struct = QuasiMeta.generateQuasiCoefficients(QuasiObj);
 
-    str = [QuasiObj.VelData.seriesID, '_META'];
-    save(fullfile(saveLocation, str), 'QMO_Struct', '-v7.3')
+%     str = [QuasiObj.VelData.seriesID, '_META'];
+%     save(fullfile(saveLocation, str), 'QMO_Struct', '-v7.3')
 
 
 
