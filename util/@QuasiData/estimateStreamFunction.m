@@ -386,7 +386,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
            
             % Take fum over difference between analytical and
             % simulation velocities                
-            fsum = fsum + (Vr(idx) - ur).^2 + (Vt(idx) - ut).^2;
+            fsum = fsum + sqrt((Vr(idx) - ur).^2 + (Vt(idx) - ut).^2);
         end
 
         % Normalise to the number of lattice points N

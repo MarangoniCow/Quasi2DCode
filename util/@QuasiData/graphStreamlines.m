@@ -29,6 +29,7 @@ function fig = graphStreamlines(this, fcnName)
     hold on
     Uabs = abs(Ur) + abs(Ut);
     pcolor(X, Y, Uabs./max(Uabs));
+    colorbar
     colormap parula
     shading interp
 

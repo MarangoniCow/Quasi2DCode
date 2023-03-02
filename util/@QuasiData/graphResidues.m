@@ -26,21 +26,15 @@ function graphResidues(this, fcnName)
     Y = this.VelData.Y;
 
 
-    
-    
     % Fetch simulation velocity
     Vx = this.VelData.velocityPlaneCartesian(:, :, 1);
     Vy = this.VelData.velocityPlaneCartesian(:, :, 2);
+    V  = sqrt(Vx.^2 + Vy.^2);
 
     % Convert approximation velocity
     Ux =    Ur.*cos(Th) - Ut.*sin(Th);
     Uy =    Ur.*sin(Th) + Ut.*cos(Th);
-
-    % Normalise
-    Ux = Ux./max(Ux);
-    Uy = Uy./max(Uy);
-    Vx = Vx./max(Vx);
-    Vy = Vy./max(Vy);
+    U  =    sqrt(Ux.^2 + Uy.^2);
 
     % Find difference 
     Wx = Vx - Ux;
@@ -48,8 +42,9 @@ function graphResidues(this, fcnName)
     
     % Colourmap plot: absolute value of velocity.    
     hold on
-    Uabs = abs(Wx) + abs(Wy);
-    pcolor(X, Y, Uabs./max(Uabs));
+    Wabs = sqrt(Wx.^2 + Wy.^2)./max(V);
+    pcolor(X, Y, Wabs./max(Wabs));
+    colorbar
     colormap parula
     shading interp
 

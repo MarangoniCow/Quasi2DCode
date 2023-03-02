@@ -117,14 +117,18 @@ classdef VelocityData < LudwigData
             this.checkForCartesianPlane;
 
             % Sum over all lattice points          
-            Vs = this.velocityPlaneCartesian(:);
+            Vsx = this.velocityPlaneCartesian(:, :, 1);
+            Vsy = this.velocityPlaneCartesian(:, :, 2);
+
             Vbar = 0;
-            for i = 1:length(Vs)
-                Vbar = Vbar + Vs(i);
+            
+            for i = 1:length(Vsx)
+                Vbar = Vbar + sqrt(Vsx(i).^2 + Vsy(i).^2);
             end
 
+
             % Divide by total number of points for Vbar
-            Vbar = Vbar/length(Vs);
+            Vbar = Vbar/length(Vsx);
         end
     end
 

@@ -39,7 +39,7 @@ function viking_script(SCRIPTNAME, VAR)
     % ----------------------------------------------------------------------- %
     
     ColloidRadius   = 11.33;  
-    RetainVelData   = false;
+    RetainVelData   = true;
     saveLocation    = '../Data';
 
     switch VAR
@@ -56,6 +56,9 @@ function viking_script(SCRIPTNAME, VAR)
             PlaneExtractIdx{2} = 20:236;
 
         case 'W'
+
+            PlaneExtractIdx{1} = 1:384;
+            PlaneExtractIdx{2} = 20:236;
 
             switch(num2str(seriesNumber))
                 case 1
