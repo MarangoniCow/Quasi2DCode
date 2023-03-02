@@ -95,8 +95,8 @@ function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
         x_range = p.Results.PlaneExtractIdx{1}; 
         y_range = p.Results.PlaneExtractIdx{2}; 
     end
-
-    VelObj.extractVelocity;
+    
+    VelObj.extractVelocity(t);
     
     % Extract velocity plane
     VelObj.extractXYPlane(t, zidx, x_range, y_range);

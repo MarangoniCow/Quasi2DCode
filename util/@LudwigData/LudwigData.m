@@ -65,11 +65,16 @@ classdef LudwigData < matlab.mixin.SetGet
             
             col_disp_cell = zeros(3, n);
             col_vel_cell = zeros(3, n);
+
+            fileName = cell(1, n);
+            
+            for i = 1:n
+                fileName{i} = [this.folderStr, '/', S(i).name];
+            end
                         
             
             for i = 1:n
-                fileName = [this.folderStr, '/', S(i).name];
-                C = extractColloidCSVData(fileName);
+                C = extractColloidCSVData(fileName{i});
                 col_disp_cell(:, i) = C{1};
                 col_vel_cell(:, i) = C{2};
             end
@@ -78,12 +83,11 @@ classdef LudwigData < matlab.mixin.SetGet
             this.colloidVel = col_vel_cell;
         end
         % Extract velocity field
-        function extractVelocity(this)
+        function extractVelocity(this, t)
             
             % Check system dimensions before proceeding
             checkSysDim(this);
             
-                
             filePattern = fullfile(this.folderStr, 'vel-*');
             
             % Fetch file names from folder
@@ -92,14 +96,29 @@ classdef LudwigData < matlab.mixin.SetGet
             % have any extensions and delete.
             hasDot = contains({S.name}, '.');
             S(hasDot) = [];
+
             % n = number of files left.
             n = length(S);
             C = cell(n, 1);
-            
+            fileName = cell(n, 1);
+
+            Sx = this.systemSize(1);
+            Sy = this.systemSize(2);
+            Sz = this.systemSize(3);
+
+
             for i = 1:n
-                fileName = [this.folderStr, '/', S(i).name];
-                C{i} = extractVelocityASCIIData(fileName, this.systemSize(1), this.systemSize(2), this.systemSize(3));
+                fileName{i} = [this.folderStr, '/', S(i).name];
             end
+
+            if nargin == 2
+                    C{t} = extractVelocityASCIIData(fileName{t}, Sx, Sy, Sz);
+            else
+                for i = 1:n
+                    C{i} = extractVelocityASCIIData(fileName{i}, Sx, Sy, Sz);
+                end
+            end
+            
             
             % Update velocity field with cell. 
             this.velocityData = C; 
