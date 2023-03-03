@@ -15,7 +15,7 @@ function fig = graphQuiver(this)
     V = this.velocityPlaneCartesian(:, :, 2);
     
     
-    fig = figure;
+    fig = figure('Name', 'Simulation Quiver');
     quiver(X, Y, U, V, 'color', PlotDefaults.colours.blue(9, :), 'LineWidth', PlotDefaults.std.LineWidth);
 
     xlabel('$x$', 'interpreter', 'latex', 'FontSize', PlotDefaults.std.FontSizeLab);

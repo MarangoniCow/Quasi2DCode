@@ -15,7 +15,7 @@ function graphResidues(this, fcnName)
     end
 
     % Generate a new figure
-    fig = figure;
+    fig = figure('Name', 'Simulation/Analytic Residues');
 
     % Fetch angular and radial coordinates
     Th = this.VelData.Th;

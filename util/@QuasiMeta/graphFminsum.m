@@ -3,7 +3,7 @@ function fig = graphFminsum(this)
             %
             % Graph Fminsum over POIval
 
-            fig = figure;                       
+            fig = figure('Analytic Fminsum');                       
             Vbar = this.QuasiDataObj.VelData.avgSimulationVelocity;
 
             plot(this.POIval, this.Fminsum./Vbar, 'LineWidth', PlotDefaults.std.LineWidth);

@@ -8,7 +8,7 @@ function fig = graphStreamlines(this)
     % 
 
     % Generate a new figure
-    fig = figure;
+    fig = figure('Name', 'Simulation Streamlines');
 
     
 

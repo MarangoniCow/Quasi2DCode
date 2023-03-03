@@ -15,7 +15,7 @@ function fig = graphStreamlines(this, fcnName)
     end
 
     % Generate a new figure
-    fig = figure;
+    fig = figure('Name', 'Analytic Streamlines');
 
 
     % Check for defiend parameters

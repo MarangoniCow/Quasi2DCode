@@ -31,7 +31,7 @@ function fig = graphVelocitySurface(this, velComponentStr)
             error('Invalid velocity component, valid options: ux, uy, ur, ut or uz')
     end
     
-    fig = figure;
+    fig = figure('Name', 'Velocity Surfaces');
     surf(X', Y', Z, 'EdgeAlpha', 0.15);
     
     

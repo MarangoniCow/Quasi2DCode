@@ -18,7 +18,7 @@ function fig = graphCoefficients(this, order)
             
             
 
-            fig = figure;
+            fig = figure('Name', 'Analytic Coefficients');
             colormap spring
 
             for i = 1:length(orderList)

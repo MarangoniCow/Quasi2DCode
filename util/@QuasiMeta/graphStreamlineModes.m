@@ -23,6 +23,7 @@ function fig = graphStreamlineModes(this, POIvalIDX, order)
     
     % Graph streamlines
     fig = this.QuasiDataObj.graphStreamlines(this.ApproxType);
+    fig.Name = 'Analytic Streamline Modes';
     
     % Return colloidVelocity to original value
     this.QuasiDataObj.colloidVelocity = colloidVelocity;

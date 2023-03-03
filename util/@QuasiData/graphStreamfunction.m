@@ -13,7 +13,7 @@ function fig = graphStreamfunction(this, fcnName)
 
 
     % Plot streamfunction surface
-    fig = figure;
+    fig = figure('Name', 'Analytic Streamfunction');
     surf(psi);
 
 
