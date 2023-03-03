@@ -26,7 +26,7 @@ function extractYZPlane(this, t_idx, x_idx, y_range, z_range)
         % If not defined, validate x_range and y_range
         if nargin <= 3
             t_idx = this.timeStep;
-            x_idx = round(this.colloidDisp(1, this.timeStep);
+            x_idx = round(this.colloidDisp(1, this.timeStep));
             y_range = 1:this.systemSize(2);
             z_range = 1:this.systemSize(3);
         else

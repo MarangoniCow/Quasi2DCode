@@ -60,7 +60,7 @@ function viking_script(SCRIPTNAME, VAR)
             PlaneExtractIdx{1} = 1:384;
             PlaneExtractIdx{2} = 20:236;
 
-            switch(num2str(seriesNumber))
+            switch(str2num(seriesNumber))
                 case 1
           	        SystemSize      = [384, 256, 48];
                 case 2
