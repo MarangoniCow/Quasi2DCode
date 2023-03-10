@@ -1,0 +1,1 @@
+while true; do rsync -chavzP --stats --exclude '*.vtk' --exclude '*.inp' mjs572@viking.york.ac.uk:scratch/ludwig/examples/3DP_*_W_* ~/Documents/ludwig_viking_data; rclone copy ./ drive:/; sleep 60; done

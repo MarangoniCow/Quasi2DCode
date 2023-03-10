@@ -34,7 +34,7 @@ function graphResidues(this, fcnName)
     % Convert approximation velocity
     Ux =    Ur.*cos(Th) - Ut.*sin(Th);
     Uy =    Ur.*sin(Th) + Ut.*cos(Th);
-    U  =    sqrt(Ux.^2 + Uy.^2);
+    
 
     % Find difference 
     Wx = Vx - Ux;
@@ -43,7 +43,7 @@ function graphResidues(this, fcnName)
     % Colourmap plot: absolute value of velocity.    
     hold on
     Wabs = sqrt(Wx.^2 + Wy.^2)./max(V);
-    pcolor(X, Y, Wabs./max(Wabs));
+    pcolor(X, Y, Wabs./max(max(Wabs)));
     colorbar
     colormap parula
     shading interp
@@ -63,6 +63,6 @@ function graphResidues(this, fcnName)
     PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
 
-    title(['Streamline residues for ', fcnName, 'approximation, ID: ' this.VelData.seriesID], 'interpreter', 'none')
+    title(['Approximation Residues (', fcnName, '): ' this.VelData.seriesID], 'interpreter', 'none')
 
 end

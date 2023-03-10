@@ -25,7 +25,7 @@ function fig = graphStreamlines(this)
     % Colourmap plot: absolute value of velocity.    
     hold on
     Uabs = abs(U) + abs(V);
-    pcolor(X, Y, Uabs./max(Uabs));
+    pcolor(X, Y, Uabs./max(max(Uabs)));
     colorbar
     colormap parula
     shading interp
@@ -48,6 +48,6 @@ function fig = graphStreamlines(this)
     PlotDefaults.applyDefaultLabels;
     PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
-    title(['Streamlines for series ID: ' this.seriesID], 'interpreter', 'none')
+    title(['Simulation streamlines: ' this.seriesID], 'interpreter', 'none')
 
 end

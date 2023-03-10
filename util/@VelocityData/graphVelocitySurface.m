@@ -9,11 +9,11 @@ function fig = graphVelocitySurface(this, velComponentStr)
     this.checkForPolarPlane;
     
     % Extract plane dimensions
-    [nx, ny, ~] = size(this.velocityPlaneCartesian);
-    x = 1:nx; y = 1:ny;
+%     [nx, ny, ~] = size(this.velocityPlaneCartesian);
+%     x = 1:nx; y = 1:ny;
 
     % Set surface mesh
-    [X, Y] = meshgrid(x, y);
+%     [X, Y] = meshgrid(x, y);
 
     % Determien component of interest
     switch velComponentStr
@@ -30,7 +30,9 @@ function fig = graphVelocitySurface(this, velComponentStr)
         otherwise
             error('Invalid velocity component, valid options: ux, uy, ur, ut or uz')
     end
-    
+    x = Z(:, 1);
+    y = Z(1, :);
+    [X, Y] = meshgrid(x, y);
     fig = figure('Name', 'Velocity Surfaces');
     surf(X', Y', Z, 'EdgeAlpha', 0.15);
     

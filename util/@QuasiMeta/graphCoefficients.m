@@ -32,7 +32,7 @@ function fig = graphCoefficients(this, order)
                 end
 
                 % TO DO: Re-write order of coefficients, or make special case for correct factor for B0
-                factor = a^(order - 1);
+                factor = a^(order - 1)/this.QuasiDataObj.colloidVelocity;
     
                 % Fetch coefficients
                 for j = 1:length(C)
