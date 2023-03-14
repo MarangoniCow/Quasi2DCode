@@ -27,8 +27,24 @@ function fig = graphStreamlines(this)
     Uabs = abs(U) + abs(V);
     pcolor(X, Y, Uabs./max(max(Uabs)));
     colorbar
-    colormap parula
+   
     shading interp
+    % SET COLOURMAP
+    factor = -10;
+    colormap turbo;
+    M = colormap;
+
+    mx = linspace(0, 1, 1024);
+    I = (exp(factor*mx) - exp(factor*mx(1)));
+    I = I/I(end);
+    
+    mx = linspace(0, 1, 256);
+    E(:, 1) = interp1(mx', M(:, 1), I');
+    E(:, 2) = interp1(mx', M(:, 2), I');
+    E(:, 3) = interp1(mx', M(:, 3), I');
+    
+
+    colormap(E);
 
     hf = streamslice(X', Y', U', V');
 

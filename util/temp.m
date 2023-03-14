@@ -47,12 +47,13 @@ ax1 = axes('Parent', fig);
 
 
 
-% ColouredStreamslice(X, Y, Z, u, v, w, [], [], z0, ax1);
-% ColouredStreamslice(X, Y, Z, u, v, w, [], y0, [], ax1);
-ColouredStreamslice(X, Y, Z, u, v, w, [], [], z0, ax1, 0.2);
+ColouredStreamslice(X, Y, Z, u, v, w, x0, [], [], 'ColourMode', 'surf', 'Figure', fig, 'Alpha', 0.01);
+% ColouredStreamslice(X, Y, Z, u, v, w, [], y0, [], 'ColourMode', 'surf', 'Figure', fig, 'Alpha', 0.2)
+% ColouredStreamslice(X, Y, Z, u, v, w, x0 - 6*colloidRadius, [], [], 'ColourMode', 'surf', 'Figure', fig, 'Alpha', 0.2)
+% ColouredStreamslice(X, Y, Z, u, v, w, x0, [], [], 'ColourMode', 'surf', 'Figure', fig, 'Alpha', 0.2)
 
-ColouredStreamslice(X, Y, Z, u, v, w, x0 + 4*colloidRadius, [], [], ax1, []);
-ColouredStreamslice(X, Y, Z, u, v, w, x0 - 4*colloidRadius, [], [], ax1, []);
+% ColouredStreamslice(X, Y, Z, u, v, w, x0 + 4*colloidRadius, [], [], ax1, []);
+% ColouredStreamslice(X, Y, Z, u, v, w, x0 - 4*colloidRadius, [], [], ax1, []);
 
 
 % streamslice(X, Y, Z,  u, v, w, x0 + 60, [], [])
@@ -111,17 +112,17 @@ ColouredStreamslice(X, Y, Z, u, v, w, x0 - 4*colloidRadius, [], [], ax1, []);
 
 
 
-sx = [1, 100, 200, 210, 220, 300];
-r = linspace(0, 48/2, 5);
-t = linspace(0, 2*pi, 8);
-
-[R, Th, Sx] = meshgrid(r, t, sx);
-[Sy, Sz, Sx] = pol2cart(Th, R, Sx);
-Sy = Sy + 128;
-Sz = Sz + 24;
-
-
-sx = 1; 
+% sx = [1, 100, 200, 210, 220, 300];
+% r = linspace(0, 48/2, 5);
+% t = linspace(0, 2*pi, 8);
+% 
+% [R, Th, Sx] = meshgrid(r, t, sx);
+% [Sy, Sz, Sx] = pol2cart(Th, R, Sx);
+% Sy = Sy + 128;
+% Sz = Sz + 24;
+% 
+% 
+% sx = 1; 
 
 % sx = linspace(1, 384, 6);
 % sy = linspace(1, 256, 20);
