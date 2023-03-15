@@ -45,7 +45,7 @@ function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
     end
 
     % Extract colloid displacement
-    VelObj.colloid_a = p.Results.ColloidRadius;
+    VelObj.colloidRadius = p.Results.ColloidRadius;
     VelObj.extractColloid;
     
 

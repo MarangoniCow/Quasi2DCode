@@ -33,7 +33,7 @@ for i = 1:r
 end
 
 
-colloidRadius = VelObj.colloid_a;
+colloidRadius = VelObj.colloidRadius;
 Us = VelObj.colloidVel(1, t).*ones(size(u));
 % u = u - Us;
 

@@ -117,7 +117,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     
     
     % Generate list of points to exclude
-    a = this.VelData.colloid_a;
+    a = this.VelData.colloidRadius;
     U = this.VelData.colloidVel(:, this.VelData.timeStep);
     U = sqrt(dot(U, U));
     
@@ -276,6 +276,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
                 B4 = B(4);
                 C1 = B(5);
                 C2 = B(6);
+                
                 C3 = B(7);
                 C4 = B(8);
 

@@ -31,7 +31,7 @@ classdef LudwigData < matlab.mixin.SetGet
         systemSize      {mustBeNumeric}     % Array containing system size
         colloidDisp     {mustBeNumeric}     % {n}(3, t) array for nth colloid displacement at time t
         colloidVel      {mustBeNumeric}     % {n}(3, t) array for nth colloid velocity at time t
-        colloid_a                           % Colloid radius
+        colloidRadius                       % Colloid radius
         velocityData                        % {t}(x, y, z, 3) array for cartesian velocity at point (x, y, z) at time t
 
     end

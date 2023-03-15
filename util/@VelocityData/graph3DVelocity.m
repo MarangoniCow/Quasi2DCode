@@ -10,7 +10,7 @@ function fig = graph3DVelocity(this)
 
     % Fetch local variables
     t = this.timeStep;
-    a = this.colloid_a;
+    a = this.colloidRadius;
 
     x0 = this.colloidDisp(1, t);
     y0 = this.colloidDisp(2, t);
