@@ -4,6 +4,13 @@
 % Class to encapsulate velocity and colloid data from a Ludwig simulation
 % for processing and visualisation using native MATLAB tools.
 %
+% LudwigObj = LudwigData(folderStr, seriesID)
+%   Initialises a LudwigData object with the folder containing the Ludwig data and the identifying ID for the
+%   simulation series.
+%
+% LudwigObj = LudwigData(folderStr)
+%   Initialise a LudwigData object with seriesID = '#'.
+%
 % MEMBER VARIABLES
 %   seriesID        -   string, shorthand ID identifying simulation series
 %   folderStr       -   string, data location
@@ -12,6 +19,7 @@
 %                           fluid velocity values
 %   colloidDisp     -   colloid displacement values
 %   colloidVel      -   colloid velocity values
+%   colloidRadius   -   colloidRadius
 %
 % MEMBER FUNCTIONS
 %   LudwigData(folderStr, seriesID)
@@ -25,118 +33,69 @@
 
 
 classdef LudwigData < matlab.mixin.SetGet
-    properties
-        seriesID        char                % Data information
-        folderStr       char                % String to folder containing data
-        systemSize      {mustBeNumeric}     % Array containing system size
-        colloidDisp     {mustBeNumeric}     % {n}(3, t) array for nth colloid displacement at time t
-        colloidVel      {mustBeNumeric}     % {n}(3, t) array for nth colloid velocity at time t
-        colloidRadius                       % Colloid radius
-        velocityData                        % {t}(x, y, z, 3) array for cartesian velocity at point (x, y, z) at time t
+    properties 
+        seriesID        char                    % Simulation series name
+        folderStr       char                    % String to folder containing Ludwig ASCII data
+        systemSize      {mustBeInteger}         % (3, 1) Array containing system x, y, z sizes (L, W, H)
+        colloidDisp     {mustBeNumeric}         % {n}(3, T) array for nth colloid x, y, z, displacement at time T
+        colloidVel      {mustBeNumeric}         % {n}(3, T) array for nth colloid u, v, w, velocity at time T
+        colloidRadius   (1, 1){mustBeNumeric}   % Colloid radius
+        velocityData    {mustBeNumeric}         % {t}(x, y, z, 3) array for cartesian velocity at point (x, y, z) at time t
 
     end
     methods
-        % Constructor: Assigns folder string and series ID.
         function this = LudwigData(folderStr, seriesID)
-            
-            if nargin == 1
-                this.folderStr = folderStr;
-                this.seriesID = '#';
-            else
-                this.seriesID = seriesID;
-                this.folderStr = folderStr;
-            end
-        end
-        % Must be set to extract velocity field
-        function setSysDim(this, x, y, z)
+            if nargin == 0
+                error('LudwigData must be initialised with a target directory containing Ludwig simulation data');
+            elseif nargin >= 1
+                validateattributes(folderStr, 'char', {'scalartext'});
 
-            this.systemSize(1) = x;
-            this.systemSize(2) = y;
-            this.systemSize(3) = z; 
+                if ~isfolder(folderStr)
+                    error('Expected directory as first argument')
+                else
+                    this.folderStr = folderStr;
+                end
 
-        end
-        % Extract colloid position and velocity
-        function extractColloid(this)
-
-                       
-            filePattern = fullfile(this.folderStr, '*.csv');
-            S = dir(filePattern);
-            n = length(S);
-            
-            col_disp_cell = zeros(3, n);
-            col_vel_cell = zeros(3, n);
-
-            fileName = cell(1, n);
-            
-            for i = 1:n
-                fileName{i} = [this.folderStr, '/', S(i).name];
-            end
-                        
-            
-            for i = 1:n
-                C = extractColloidCSVData(fileName{i});
-                col_disp_cell(:, i) = C{1};
-                col_vel_cell(:, i) = C{2};
-            end
-
-            this.colloidDisp = col_disp_cell;
-            this.colloidVel = col_vel_cell;
-        end
-        % Extract velocity field
-        function extractVelocity(this, t)
-            
-            % Check system dimensions before proceeding
-            checkSysDim(this);
-            
-            filePattern = fullfile(this.folderStr, 'vel-*');
-            
-            % Fetch file names from folder
-            S = dir(filePattern);
-            % ASCII files have no extension, so we double check we don't
-            % have any extensions and delete.
-            hasDot = contains({S.name}, '.');
-            S(hasDot) = [];
-
-            % n = number of files left.
-            n = length(S);
-            C = cell(n, 1);
-            fileName = cell(n, 1);
-
-            Sx = this.systemSize(1);
-            Sy = this.systemSize(2);
-            Sz = this.systemSize(3);
-
-
-            for i = 1:n
-                fileName{i} = [this.folderStr, '/', S(i).name];
-            end
-
-            if nargin == 2
-                    C{t} = extractVelocityASCIIData(fileName{t}, Sx, Sy, Sz);
-            else
-                for i = 1:n
-                    C{i} = extractVelocityASCIIData(fileName{i}, Sx, Sy, Sz);
+                if nargin == 2
+                    validateattributes(seriesID, 'char', {'scalartext'})
+                    this.seriesID = seriesID;
+                else
+                    this.seriesID = '#';
                 end
             end
-            
-            
-            % Update velocity field with cell. 
-            this.velocityData = C; 
         end
-        function checkSysDim(this)
+        
+        function setSysDim(this, L, W, H)
+        % setSysDim(this, L, W, H) - Sets the length, width and height corresponding to the LB-simulation
 
-            if (length(this.systemSize) == 0)
+            this.systemSize(1) = L;
+            this.systemSize(2) = W;
+            this.systemSize(3) = H; 
+        end
+               
+        function checkSysDim(this)
+        % checkSysDim(this)     - Checks to see if the system size is set
+
+            if isempty(this.systemSize)
                 error('System dimensions unknown: set using setSysDim');
             end
         end
+
         function checkVelocityData(this)
+        % checkVelocityData(this) - Check if any velocity data has been extracted
 
             if isempty(this.velocityData)
                 error('Velocity data not extracted')
             end
-        end
-
-
-        
+        end        
     end
+    
+    % ======================================================= %
+    %   Externally defined methods
+    % ======================================================= %
+    methods 
+        extractColloid(this);
+        extractVelocity(this, t);
+    end
+
 end
