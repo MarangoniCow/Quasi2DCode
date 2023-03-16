@@ -5,29 +5,32 @@
 
 
 function fig = graphStreamlines(this, fcnName)
-
-
-    switch(fcnName)
-        case 'B'
-            [Ur, Ut] = this.velocityFieldB;
-        case 'A'
-            [Ur, Ut] = this.velocityFieldA;
-    end
+    
+    % Check for defined parameters
+    this.checkForParameters;
 
     % Generate a new figure
     fig = figure('Name', 'Analytic Streamlines');
 
+    [Ux, Uy] = this.quasi2DVelocity(this.Coeff, this.VelData.R, this.VelData.Th, true);
 
-    % Check for defiend parameters
-    this.checkForParameters(fcnName);
-    
-    % Fetch coordinates
     X = this.VelData.X;
     Y = this.VelData.Y;
     
-    % Colourmap plot: absolute value of velocity.    
+
+    
+    
+    %  Set velocity to zero where the colloid is
+    Vr = this.VelData.velocityPlanePolar(:, :, 1);
+    
+    % Find colloid location
+    idxlist = find(~Vr);
+    Ux(idxlist) = 0;
+    Uy(idxlist) = 0;
+    Uabs = abs(Ux) + abs(Uy);
+
+    % Pcolour
     hold on
-    Uabs = abs(Ur) + abs(Ut);
     pcolor(X, Y, Uabs./max(max(Uabs)));
     colorbar
    
@@ -49,15 +52,7 @@ function fig = graphStreamlines(this, fcnName)
     
 
     colormap(E);
-
-
-
-
-    R   = this.VelData.R;
-    Th  = this.VelData.Th;
-
-    Ux =    Ur.*cos(Th) - Ut.*sin(Th);
-    Uy =    Ur.*sin(Th) + Ut.*cos(Th);
+    
 
     hf = streamslice(X', Y', Ux', Uy');
 
@@ -73,6 +68,6 @@ function fig = graphStreamlines(this, fcnName)
     PlotDefaults.applyDefaultLabels;
     PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
-    title(['Approximation Streamlines (', fcnName, '): ' this.VelData.seriesID], 'interpreter', 'none')
+    title(['Approximation Streamlines: ' this.VelData.seriesID], 'interpreter', 'none')
 
 end

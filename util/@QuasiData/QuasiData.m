@@ -4,69 +4,55 @@
 % Class to encapsulate methods for Quasi-2D parameter estimations
 %
 % MEMBER VARIABLES
-%   - VelData               VelocityData object
-%   - CoeffB                Second approximation coefficients
-%   - CoeffA                First approximation coefficients
-%   - psi_B                 Second approximation streamfunction
-%   - psi_A                 First approxximation streamfunction
-%   - lambda                `Screening' parameter
-%   - colloidRadius         Colloid radius, used in fitting
-%   - colloidVelocity       Colloid velocity, used in fitting
+%   - VelData                   VelocityData object
+%   - Coeff                     Approximation coefficients
+%   - lambda                    `Screening' parameter
+%   - colloidVelocity           Colloid velocity, used in fitting
 %
 % MEMBER FUNCTIONS
-%   - esimateStreamFunction(this)   Estimate the A & B streamfunction
-%   - streamFunction_A            Return the first analytically-determined streamfunction
-%   - streamFunction_B            Return the second analytically-determined streamfunction
-%   - checkForVelData               Throws error if VelData not set
+%   - esimateStreamFunction     Approximate the streamfunction for the flow
 
 classdef QuasiData < matlab.mixin.SetGet
 
     properties
         VelData             % VelocityData object
-        CoeffA              % A-field coefficients
-        CoeffB              % B-field coefficients
-        statsB
-        statsA
+        Stats
+        Fminsum
+        Coeff
         lambda
-        colloidRadius
         colloidVelocity
     end
 
     methods
 
         function this = QuasiData(VelData)
-            % Set velocity data
+            % Constructor which sets a reference to VelData
             this.VelData = VelData;
         end
 
         function checkForVelData(this)
+            % Check for existence of a VelData object
             if isempty(this.VelData)
                 error('VelocityData object uninitiated');
             end
         end
 
-        function checkForParameters(this, fcnName)
-            
-            if nargin < 2 && isempty(this.CoeffA) || isempty(this.CoeffB)
-                error('Parameters undefined');
-            elseif strcmp('A', fcnName) && isempty(this.CoeffA)
-                error('Approximation A coefficients undefined')
-            elseif strcmp('B', fcnName) && isempty(this.CoeffB)
-                error('Approximation B coefficients undefined')
+        function checkForParameters(this)
+            % Check if coefficients have been determined      
+            if isempty(this.Coeff)
+                error('Undetermined Coefficients')
             end
         end
+
+        function [Th, R] = colloidCoordinateTransformation(this, xt, yt)
+            % Coordinate transformation for a colloid placed at (xt, yt)
+            [Th, R] = cart2pol(this.VelData.X - xt, this.VelData.Y - yt);
+        end
     end
-    
-    % Stream function methods
+        
+    % EXTERNALLY-DEFINED METHODS
     methods
-        psi = streamFunction_A(this, R, Th);
-        psi = streamFunction_B (this, R, Th);
-        [ur, ut] = velocityFieldB(this, R, Th);
-        [ur, ut] = velocityFieldA(this, R, Th);
-    end
-    
-    % Graphing methods
-    methods
+        [ux, uy] = quasi2DVelocity(this, B, r, theta, bool); 
         fig = graphStreamfunction(this, fcnName);
         fig = graphStreamlines(this, fcnName);
         fig = graphResidues(this, fcnName);

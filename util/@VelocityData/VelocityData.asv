@@ -31,7 +31,6 @@ classdef VelocityData < LudwigData
     % Defined externally
     methods
         extractYZPlane(this, t_idx, z_idx, x_range, y_range);
-        convertPolar(this);
     end
 
     methods
@@ -86,9 +85,10 @@ classdef VelocityData < LudwigData
     % Declare graphing methods
     methods
         fig = graphVelocitySurface(this, velComponentStr);
-        fig = graphQuiver(this);
-        fig = graphStreamlines(this);
-        fig = graph3DVelocity(this);
+        fig = graphQuiver(this)
+        fig = graphStreamlines(this)
+        fig = graph3DVelocity(this)
+
     end
     
     % Helper method to find channel runs

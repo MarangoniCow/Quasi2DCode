@@ -1,25 +1,25 @@
 
 
-function graphResidues(this, fcnName)
+function graphResidues(this)
 
 
     % Check for defined parameters
-    this.checkForParameters(fcnName);
+    this.checkForParameters;
+    
+    % Fetch field
+    [Ux, Uy] = this.quasi2DVelocity(this.Coeff, this.VelData.R, this.VelData.Th, true);
 
-    % Fetch the correct velocity field
-    switch(fcnName)
-        case 'B'
-            [Ur, Ut] = this.velocityFieldB;
-        case 'A'
-            [Ur, Ut] = this.velocityFieldA;
-    end
+    %  Set velocity to zero where the colloid is
+    Vr = this.VelData.velocityPlanePolar(:, :, 1);
+    
+    % Find colloid location
+    idxlist = find(~Vr);
+    Ux(idxlist) = 0;
+    Uy(idxlist) = 0;
+    U = norm([Ux; Uy]);
 
     % Generate a new figure
     fig = figure('Name', 'Simulation/Analytic Residues');
-
-    % Fetch angular and radial coordinates
-    Th = this.VelData.Th;
-    R = this.VelData.R;
 
     % Fetch cartesian coordinates
     X = this.VelData.X;
@@ -29,26 +29,27 @@ function graphResidues(this, fcnName)
     % Fetch simulation velocity
     Vx = this.VelData.velocityPlaneCartesian(:, :, 1);
     Vy = this.VelData.velocityPlaneCartesian(:, :, 2);
-    V  = sqrt(Vx.^2 + Vy.^2);
-
-    % Convert approximation velocity
-    Ux =    Ur.*cos(Th) - Ut.*sin(Th);
-    Uy =    Ur.*sin(Th) + Ut.*cos(Th);
+    Vabs = sqrt(Vx.^2 + Vy.^2);
     
 
     % Find difference 
     Wx = Vx - Ux;
     Wy = Vy - Uy;
+
+    Wabs = sqrt(Wx.^2 + Wy.^2);
+    C = Wabs./Vabs;
+
+    
+    
     
     % Colourmap plot: absolute value of velocity.    
     hold on
-    Wabs = sqrt(Wx.^2 + Wy.^2)./max(V);
-    pcolor(X, Y, Wabs./max(max(Wabs)));
+    pcolor(X, Y, C);
     colorbar
     shading interp
 
     % SET COLOURMAP
-    factor = -3;
+    factor = -1;
     colormap turbo;
     M = colormap;
 
@@ -63,6 +64,7 @@ function graphResidues(this, fcnName)
     
 
     colormap(E);
+    clim([0 1])
 
 
     hf = streamslice(X', Y', Wx', Wy');
@@ -80,6 +82,6 @@ function graphResidues(this, fcnName)
     PlotDefaults.applyEqualAxes('xy');
     PlotDefaults.applySizes('std');
 
-    title(['Approximation Residues (', fcnName, '): ' this.VelData.seriesID], 'interpreter', 'none')
+    title(['Approximation Residues: ' this.VelData.seriesID], 'interpreter', 'none')
 
 end

@@ -6,11 +6,11 @@
 function fig = graph3DVelocity(this)
 
     % Generate a new figure
-    fig = figure('Name', 'Simulation 3D Velocity')
+    fig = figure('Name', 'Simulation 3D Velocity');
 
     % Fetch local variables
     t = this.timeStep;
-    a = this.colloidRadius;
+    a = this.VelData.colloidRadius;
 
     x0 = this.colloidDisp(1, t);
     y0 = this.colloidDisp(2, t);

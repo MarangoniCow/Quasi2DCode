@@ -4,7 +4,7 @@ function fig = graphCoefficients(this, order)
             % Graph changes in coefficients over POIval. Coefficients are factorised into dimensions of velocity.
 
             % Local variable
-            a = this.QuasiDataObj.colloidRadius;
+            a = this.QuasiDataObj.VelData.colloidRadius;
 
             % Initialise coefficients and factor
             C = zeros(1, this.N);

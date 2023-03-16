@@ -23,11 +23,20 @@ function extractXYPlane(this, t_idx, z_idx, x_range, y_range)
             this.extractVelocity;
         end
 
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %   Input validations                                          % 
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
         % If not defined, validate x_range and y_range
         if nargin <= 3
             x_range = 1:this.systemSize(1);
             y_range = 1:this.systemSize(2);
-        else
+
+            if nargin <= 2
+                z0 = this.colloidDisp(3, t_idx);
+                z_idx = closestelement(1:this.systemSize(3), z0);
+            end
+        
             % NEED BETTER ERROR CHECKING HERE
         end
         

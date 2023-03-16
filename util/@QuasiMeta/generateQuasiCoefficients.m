@@ -14,7 +14,7 @@ function QMO_Struct = generateQuasiCoefficients(QuasiDataObj, varargin)
     p.addRequired('QuasiDataObj');
 
     % Local variables
-    colloidRadius = QuasiDataObj.colloidRadius;
+    colloidRadius = QuasiDataObj.VelData.colloidRadius;
 
     % POIval (POI is always exclusion radius)
     exclusionDefault = 1:2:floor(4*colloidRadius);

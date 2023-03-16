@@ -60,8 +60,8 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     p.addOptional('approximationType', approximationDefault, approximationValidation);
 
     % Exclusion radius
-    exclusionDefault = 2*this.colloidRadius;
-    exclusionMax = floor(0.5*(this.VelData.systemSize(2) - this.colloidRadius));
+    exclusionDefault = 2*this.VelData.colloidRadius;
+    exclusionMax = floor(0.5*(this.VelData.systemSize(2) - this.VelData.colloidRadius));
     exclusionValidation = @(x) isnumeric(x) && x >= 0 && x <= exclusionMax;
     p.addOptional('exclusionRadius', exclusionDefault, exclusionValidation);
 
@@ -106,10 +106,10 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     
     
     % Fetch velocity data
-    Vr = this.VelData.velocityPlanePolar(:, :, 1);
-    Vt = this.VelData.velocityPlanePolar(:, :, 2);
-    Vr = Vr(:);
-    Vt = Vt(:);
+    Vx = this.VelData.velocityPlaneCartesian(:, :, 1);
+    Vy = this.VelData.velocityPlaneCartesian(:, :, 2);
+    Vx = Vx(:);
+    Vy = Vy(:);
     
     % Fetch parameters
     x0 = this.VelData.x0;
@@ -119,7 +119,7 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     % Generate list of points to exclude
     a = this.VelData.colloidRadius;
     U = this.VelData.colloidVel(:, this.VelData.timeStep);
-    U = sqrt(dot(U, U));
+
     
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,11 +150,35 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     % matching (colloid radius + some buffer)
     X(idxList) = [];
     Y(idxList) = [];
-    Vr(idxList) = [];
-    Vt(idxList) = [];
+    Vx(idxList) = [];
+    Vy(idxList) = [];
     R(idxList) = [];
     Th(idxList) = [];
     N = length(X);
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %                       SET-UP REFLECTIONS                        %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    L = this.VelData.systemSize(1);
+    W = this.VelData.systemSize(2);
+
+    % REFLECTION NUMBERING:
+    %   Apply reflections in all 8 lattice points around the channel, numbering each transformation from 1 through 8
+    %   where we start with the reflectionin the +ve y-plane.
+    
+    Rr = cell(1, 8);
+    Thr = cell(1, 8);
+
+    [Thr{1}, Rr{1}] = this.colloidCoordinateTransformation(x0, y0 + W);
+    [Thr{2}, Rr{2}] = this.colloidCoordinateTransformation(x0 + L, y0 + W);
+    [Thr{3}, Rr{3}] = this.colloidCoordinateTransformation(x0 + L, y0);
+    [Thr{4}, Rr{4}] = this.colloidCoordinateTransformation(x0 + L, y0 - W);
+    [Thr{5}, Rr{5}] = this.colloidCoordinateTransformation(x0 , y0 - W);
+    [Thr{6}, Rr{6}] = this.colloidCoordinateTransformation(x0 - L, y0 - W);
+    [Thr{7}, Rr{7}] = this.colloidCoordinateTransformation(x0 - L, y0);
+    [Thr{8}, Rr{8}] = this.colloidCoordinateTransformation(x0 - L, y0 + W);
+    
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %                       SET-UP FMINSEARCH                         %
@@ -199,201 +223,51 @@ function CoeffStruct = estimateStreamFunction(this, varargin)
     options = optimset('MaxFunEvals', 200*length(guess), 'MaxIter', 200*length(guess), 'TolFun', p.Results.errorTol);
     
     % Run fminsearch
-    switch p.Results.approximationType
-        case 'A'
-            [this.CoeffA, CoeffStruct.Fminsum, ~, this.statsA]  = fminsearch(@Q2D_Approximation_A, guess, options);
-            
-            if ~p.Results.includeDriftVelocity
-                this.CoeffA = [this.CoeffA, 0];
-            end
-            
-            CoeffStruct.Coefficients = this.CoeffA;
-            CoeffStruct.Fminstats = this.statsA;
-
-            
-        case 'B'
-            [this.CoeffB, CoeffStruct.Fminsum, ~, this.statsB] = fminsearch(@Q2D_Approximation_B, guess, options);
-
-            if ~p.Results.includeDriftVelocity
-                this.CoeffB = [this.CoeffB, 0];
-            end
-
-            CoeffStruct.Coefficients = this.CoeffB;
-            CoeffStruct.Fminstats = this.statsB;
-
-            
+    [this.Coeff, CoeffStruct.Fminsum, ~, this.Stats] = fminsearch(@ApproximateQuasiFlow, guess, options);
+    
+    % Default behaviour of graphing functions is to assume the last coefficient corresponds to the drift velocity. Set
+    % to zero if it hasn't been included in the approximation.
+    if ~p.Results.includeDriftVelocity
+        this.Coeff = [this.Coeff, 0];
     end
 
-    
+    CoeffStruct.Coefficients = this.Coeff;
+    CoeffStruct.Fminstats = this.Stats;
+    this.Fminsum = CoeffStruct.Fminsum;
 
 
     
-    
-    
-    %%%%%%%%%%%%%%%%%% ANALYTICALLY DEFINED STREAM FUNCTIONS %%%%%%%%%%%%%%%%%%
-        
-    function f = Q2D_Approximation_A(B)
+    function fsum = ApproximateQuasiFlow(B)
         % INPUT PARAMETERS
         %   b1, b2, c1, c2          - Unknown constants to be solved for
         %   x0, y0                  - Swimmer/colloid center
         %   lambda                  - 'Screening length' parameter, should be set
         %                               to sqrt(h^2/2)
         %   x, y                    - Cartesian coordinates to be solved at
-        
-        % Local helper functions
-        switch length(B)
-            case 2
-                B1 = B(1);
-                B2 = 0;
-                B3 = 0;
-                B4 = 0;
-                C1 = B(2);
-                C2 = 0;
-                C3 = 0;
-                C4 = 0;
-            case 4
-                B1 = B(1);
-                B2 = B(2);
-                B3 = 0;
-                B4 = 0;
-                C1 = B(3);
-                C2 = B(4);
-                C3 = 0;
-                C4 = 0;
-            case 6
-                B1 = B(1);
-                B2 = B(2);
-                B3 = B(3);
-                B4 = 0;
-                C1 = B(4);
-                C2 = B(5);
-                C3 = B(6);
-                C4 = 0;
-            case 8
-                B1 = B(1);
-                B2 = B(2);
-                B3 = B(3);
-                B4 = B(4);
-                C1 = B(5);
-                C2 = B(6);
-                
-                C3 = B(7);
-                C4 = B(8);
-
-            otherwise
-                error('Undetermined number of coefficients')
-        end
-        
-
-        lambda = this.lambda;
-        
-        
-        f = 0;
-
-        for idx = 1:N
-        
-            r = R(idx);
-            theta = Th(idx);
-
-            
-
-            % Define besselk'_i(r/lambda)
-            BKD1 = -1./lambda.*(besselk(0, r./lambda) + lambda./r.*besselk(1, r./lambda));
-            BKD2 = -1./lambda.*(besselk(1, r./lambda) + 2.*lambda./r.*besselk(2, r./lambda));
-            BKD3 = -1./lambda.*(besselk(2, r./lambda) + 3.*lambda./r.*besselk(3, r./lambda));
-            BKD4 = -1./lambda.*(besselk(3, r./lambda) + 4.*lambda./r.*besselk(4, r./lambda));
-        
-            % Define radial component
-            ur =    1*B1.*r.^-2.*cos(theta) + ...
-                    2*B2.*r.^-3.*cos(2*theta) + ...
-                    3*B3.*r.^-4.*cos(3*theta) + ...
-                    4*B4.*r.^-5.*cos(4*theta) + ...
-                    1*C1./r.*cos(1*theta).*besselk(1, r./this.lambda) + ...
-                    2*C2./r.*cos(2*theta).*besselk(2, r./this.lambda) + ...
-                    3*C3./r.*cos(3*theta).*besselk(3, r./this.lambda) + ...
-                    4*C4./r.*cos(4*theta).*besselk(4, r./this.lambda);
-            
-            % Define angular component
-            ut =    1*B1.*r.^-2.*sin(1*theta) + ...
-                    2*B2.*r.^-3.*sin(2*theta) + ... 
-                    3*B3.*r.^-4.*sin(3*theta) + ... 
-                    4*B4.*r.^-5.*sin(4*theta) + ... 
-                    -C1.*sin(1*theta)./lambda.*BKD1 + ...
-                    -C2.*sin(2*theta)./lambda.*BKD2 + ...
-                    -C3.*sin(3*theta)./lambda.*BKD3 + ...
-                    -C4.*sin(4*theta)./lambda.*BKD4;
-            
-            % Summation
-            f = f + sqrt((Vr(idx) - ur).^2 + (Vt(idx) - ut).^2);
-            
-        end
-        f = f./N;
-    end
-
-    function fsum = Q2D_Approximation_B(B)
-        % INPUT PARAMETERS
-        %   b1, b2, c1, c2          - Unknown constants to be solved for
-        %   x0, y0                  - Swimmer/colloid center
-        %   lambda                  - 'Screening length' parameter, should be set
-        %                               to sqrt(h^2/2)
-        %   x, y                    - Cartesian coordinates to be solved at
-
 
         % Sum variable
-        fsum = 0;
-
-        % Screening length
-        lambda = this.lambda;
+        fsum = zeros(1, N);
 
         % Complete sum over all lattice points         
         for idx = 1:N
 
-            % Fetch radial and angular variables            
-            r = R(idx);
-            theta = Th(idx);
-
-            % Define ur and ut: add simulation drift velocity if requested
-            if p.Results.includeDriftVelocity
-                ur = B(end).*cos(theta);
-                ut = -B(end).*sin(theta);
-            else
-                ur = 0;
-                ut = 0;
-            end
-
-
+            % Fetch quasi-2D flow field
+            [ux, uy] = this.quasi2DVelocity(B, R(idx), Th(idx));
             
-            % Run over solve order
-            for n = 1:solveOrder
-
-                % Shorthand notations
-                kappa   = besselk(n, a./lambda);
-                BK      = besselk(n, r./lambda)./kappa;
-                BKD     = -1./lambda.*(besselk(n - 1, r./lambda) + n*lambda./r.*besselk(n, r./lambda))./kappa;
-
-                % Add U terms
-                if n == 1
-                    ur = ur + U.*a.*cos(theta)./r.*BK;
-                    ut = ut - U.*a.*sin(theta).*BKD;
-                end
-                
-                % Radial and angular velocities
-                ur = ur + n*B(n).*cos(n.*theta)./r.*(r.^(-n) - a.^-(n).*BK);
-                ut = ut + B(n).*sin(n*theta).*(n.*r.^(-n -1) + a.^(-n).*BKD);
-                
-               
+            % Add reflections to computer flow fields
+            for j = 1:8
+                [uxr, uyr] = this.quasi2DVelocity(B, Rr{j}(idx), Thr{j}(idx));
+                ux = ux + uxr;
+                uy = uy + uyr;
             end
-            
-           
-            % Take fum over difference between analytical and
-            % simulation velocities
-
-            Vbar = sqrt(Vr(idx)^2 + Vt(idx)^2);
-            fsum = fsum + sqrt((Vr(idx) - ur).^2 + (Vt(idx) - ut).^2)./Vbar;
+                            
+            % Take fminsum over non-dimensionalised difference between simulation and analytical quantities
+            factor = norm(U)*a/R(idx);
+            fsum(idx) = sqrt((Vx(idx) - ux).^2 + (Vy(idx) - uy).^2)./factor;
         end
 
         % Normalise to the number of lattice points N
-        fsum = fsum./N;
-    end
+        fsum = sum(fsum)./N;
 
+    end
 end
