@@ -31,7 +31,7 @@ classdef VelocityData < LudwigData
     % Defined externally
     methods
         extractYZPlane(this, t_idx, z_idx, x_range, y_range);
-        convertPolar(this);
+        convertPolar(this, x0, y0);
     end
 
     methods

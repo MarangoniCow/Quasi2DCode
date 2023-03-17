@@ -53,11 +53,11 @@ function fractal_script(SCRIPTNAME, VAR)
         case 'H'
             SystemSize = [384, 256, 64];
             PlaneExtractIdx{1} = 1:384;
-            PlaneExtractIdx{2} = 20:236;
+            PlaneExtractIdx{2} = 1:256;
 
         case 'W'
 
-            switch(num2str(seriesNumber))
+            switch(str2num(seriesNumber))
                 case 1
           	        SystemSize      = [384, 256, 48];
                 case 2
@@ -117,7 +117,7 @@ function fractal_script(SCRIPTNAME, VAR)
     %   We can also estimate coefficients here, if we so wish
     % ----------------------------------------------------------------------- %
 
-    QMO_Struct = QuasiMeta.generateQuasiCoefficients(QuasiObj);
+    QMO_Struct = QuasiMeta.generateQuasiCoefficients(QuasiObj, 'solveOrder', 1, 'exclusionRadius', 20:2:30);
 
 %     str = [QuasiObj.VelData.seriesID, '_META'];
 %     save(fullfile(saveLocation, str), 'QMO_Struct', '-v7.3')

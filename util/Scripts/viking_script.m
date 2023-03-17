@@ -53,12 +53,12 @@ function viking_script(SCRIPTNAME, VAR)
         case 'H'
             SystemSize = [384, 256, 64];
             PlaneExtractIdx{1} = 1:384;
-            PlaneExtractIdx{2} = 20:236;
+            PlaneExtractIdx{2} = 1:256;
 
         case 'W'
 
             PlaneExtractIdx{1} = 1:384;
-            PlaneExtractIdx{2} = 20:236;
+            PlaneExtractIdx{2} = 1:256;
 
             switch(str2num(seriesNumber))
                 case 1
@@ -120,7 +120,7 @@ function viking_script(SCRIPTNAME, VAR)
     %   We can also estimate coefficients here, if we so wish
     % ----------------------------------------------------------------------- %
 
-    QMO_Struct = QuasiMeta.generateQuasiCoefficients(QuasiObj);
+    QMO_Struct = QuasiMeta.generateQuasiCoefficients(QuasiObj, 'solveOrder', [2, 4, 6]);
 
     str = [QuasiObj.VelData.seriesID, '_META'];
     save(fullfile(saveLocation, str), 'QMO_Struct', '-v7.3')

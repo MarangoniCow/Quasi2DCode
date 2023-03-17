@@ -108,7 +108,7 @@ function QuasiObj = generateQuasiObj(FolderStr, SystemSize, varargin)
     VelObj.extractYZPlane(t, xidx, y_range, z_range);
     
     % Convert to polar
-    convertPolar(VelObj, x0, y0);
+    VelObj.convertPolar(x0, y0);
     VelObj.z0 = z0;
     QuasiObj = QuasiData(VelObj);
     

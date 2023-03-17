@@ -98,7 +98,7 @@ classdef QuasiMeta < handle
     methods (Static)
         fig = compareStructCoefficients(QMO_Struct, order, dispStr, dispStrVal);
         fig = compareStructFminsum(QMO_Struct, dispStr, dispStrVal);
-        QMO_Struct = generateQuasiCoefficients(QuasiDataObj);
+        QMO_Struct = generateQuasiCoefficients(QuasiDataObj, varargin);
     end
 
 end
